@@ -284,10 +284,28 @@ var game;
         }
       }
     */
-    function shouldShowImage(row, col, whichboard) {
-        return game.state.myBoard[row][col] !== "" || isProposal(row, col);
+    function shouldShowImage(row, col) {
+        return (game.state.myBoard[row][col] !== "") || isProposal(row, col);
+        /*
+        if(currentUpdateUI.turnIndex == 0) {
+          if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)
+            return true;
+        }
+        else {
+          if(currentUpdateUI.state.yourShip.row == row && currentUpdateUI.state.yourShip.col ==col)
+            return true;
+        }
+  
+        return false;
+        */
     }
     game.shouldShowImage = shouldShowImage;
+    function showText() {
+        if (game.currentUpdateUI.turnIndex == 0)
+            return true;
+        return false;
+    }
+    game.showText = showText;
     function isPiece(row, col, turnIndex, pieceKind, whichboard) {
         return game.state.myBoard[row][col] === pieceKind || (isProposal(row, col) && game.currentUpdateUI.turnIndex == turnIndex);
     }

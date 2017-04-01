@@ -29,6 +29,18 @@
 <!-- <button ng-click="game.flipDirection()">change direction</button> -->
 <!-- <button ng-click="game.useRadar()">Use radar!</button> -->
 
+<div ng-if="!game.firstMove()">	        
+		        	<div ng-if="game.isMyTurn() && !game.isGameOver()"> 
+			        	<text>Your turn.</text>
+			       	</div>
+			       	<div ng-if="!game.isMyTurn() && !game.isGameOver()"> 
+                <text>Opponent's turn.</text>
+			       	</div>
+			       	<div ng-if="game.isGameOver()"> 
+			        	<text><br/></text>
+			       	</div>
+		        </div>
+</div>
 <div id="gameArea">
 
   <div id="myBoard" ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
@@ -42,7 +54,7 @@
         id="{{'my' + row + 'x' + col}}">
       <div style="width:100%; height: 100%"
           ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}"
-          ng-if="game.shouldShowImage(row, col, 0)">
+          ng-if="game.shouldShowImage(row, col)">
           <img src="css/ship_t.gif" width="125%" height="125%" position='absolute' margin='auto'>
           <class="ship" img src="css/ship_t.gif" width="125%" height="125%" position='absolute' margin='auto'>
 
