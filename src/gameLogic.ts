@@ -121,21 +121,24 @@ module gameLogic {
 
 
   export function getInitialState(): IState {
-    let board: Board = [];
-    for (let i = 0; i < ROWS; i++) {
-      board[i] = [];
-      for (let j = 0; j < COLS; j++) {
-        board[i][j] = '';
+    if(1) {
+      let board: Board = [];
+      for (let i = 0; i < ROWS; i++) {
+        board[i] = [];
+        for (let j = 0; j < COLS; j++) {
+          board[i][j] = '';
+        }
       }
-    }
-    // random starting point
-    let mine = Math.floor((Math.random() * 10));
-    let your = Math.floor((Math.random() * 10));
-    board[0][mine] = 'O';
-    board[9][your] = 'O';
+      // random starting point
+      let mine = Math.floor((Math.random() * 10));
+      let your = Math.floor((Math.random() * 10));
 
-    return {myBoard: board, delta: null, start:0, myShip: {row:0,col:mine}, yourShip: {row:9,col:your} };
-  }
+      board[0][mine] = 'O';
+      board[9][your] = 'O';
+      
+      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:9,col:your} };
+    }  
+}
 /*
   export function validSet(board: Board, row: number, col: number, leng: number, direction: boolean): boolean {
     if(direction == true) {
@@ -178,6 +181,7 @@ module gameLogic {
   export function createMove(
       stateBeforeMove: IState, row: number, col: number, turnIndexBeforeMove: number): IMove {
 
+    
     if (!stateBeforeMove) {
       stateBeforeMove = getInitialState();
     }
@@ -210,6 +214,7 @@ module gameLogic {
 
       myBoardAfterMove[originRow][originCol] = '';
       myBoardAfterMove[row][col] = 'O';
+      
       myP = {row: row, col: col};
       yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
     }
