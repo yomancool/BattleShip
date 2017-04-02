@@ -250,23 +250,26 @@ export function move():void {
   let yourCol = state.yourShip.col;
 
   for(let i=0;i<10;i++)
-    for(let j=0;j<10;j++) {
+    for(let j=0;j<10;j++){
       if(document.getElementById('my' + (i) + 'x' + (j)).classList.contains("moveArea"))
         document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
     }
 
   if(currentUpdateUI.yourPlayerIndex==0) {
-    for(let i=-1;i<=1;i++)
-      for(let j=-1;j<=1;j++)
-        if((myRow+i) >=0 && (myRow+i) < 10 && (myCol+j) >=0 && (myCol+j) < 10) {
-          document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
-        }
+    for(let i=-1;i<=1;i++){
+      for(let j=-1;j<=1;j++){
+        if (i!=0 || j!=0)
+          if((myRow+i) >=0 && (myRow+i) < 10 && (myCol+j) >=0 && (myCol+j) < 10) 
+                  document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
+      }
+    } 
   }
   else {
     for(let i=-1;i<=1;i++)
       for(let j=-1;j<=1;j++)
-        if((yourRow+i) >=0 && (yourRow+i) < 10 && (yourCol+j) >=0 && (yourCol+j) < 10) 
-          document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
+        if (i!=0 || j!=0)
+          if((yourRow+i) >=0 && (yourRow+i) < 10 && (yourCol+j) >=0 && (yourCol+j) < 10)
+            document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
   }
 }
 
