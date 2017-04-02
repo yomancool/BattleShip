@@ -201,20 +201,43 @@ module game {
       currentUpdateUI.yourPlayerIndex === currentUpdateUI.turnIndex; // it's my turn
   }
 
+  export function validMove(row: number, col: number): boolean {
+    let shipRow, shipCol;
+    if(currentUpdateUI.yourPlayerIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    //same index
+    if(shipRow==row && shipCol==col)
+      return false;
+
+    for(let i=-1; i<=1; i++) 
+      for(let j=-1; j<=1; j++) {
+        if((shipRow+i == row && shipCol+j == col))
+          return true;
+      }
+    return false;
+  }
+
 
   export function cellClickedMy(row: number, col: number): void {
-  log.info("My Board cell:", row, col);
-  if (!isHumanTurn()) return;
-  let nextMove: IMove = null;
-  try {
-    nextMove = gameLogic.createMove(
-        state, row, col, currentUpdateUI.turnIndex);
-  } catch (e) {
-    log.info(["Cell is already full in position:", row, col]);
-    return;
-  }
-  // Move is legal, make it!
-  makeMove(nextMove);
+    log.info("My Board cell:", row, col);
+    if (!validMove(row,col)) return;
+    if (!isHumanTurn()) return;
+    let nextMove: IMove = null;
+    try {
+      nextMove = gameLogic.createMove(
+          state, row, col, currentUpdateUI.turnIndex);
+    } catch (e) {
+      log.info(["Cell is already full in position:", row, col]);
+      return;
+    }
+    // Move is legal, make it!
+    makeMove(nextMove);
 }
 
 

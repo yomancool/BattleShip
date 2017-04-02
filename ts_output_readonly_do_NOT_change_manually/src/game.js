@@ -185,8 +185,31 @@ var game;
             game.currentUpdateUI.yourPlayerIndex === game.currentUpdateUI.turnIndex; // it's my turn
     }
     game.isMyTurn = isMyTurn;
+    function validMove(row, col) {
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.yourPlayerIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        //same index
+        if (shipRow == row && shipCol == col)
+            return false;
+        for (var i = -1; i <= 1; i++)
+            for (var j = -1; j <= 1; j++) {
+                if ((shipRow + i == row && shipCol + j == col))
+                    return true;
+            }
+        return false;
+    }
+    game.validMove = validMove;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
+        if (!validMove(row, col))
+            return;
         if (!isHumanTurn())
             return;
         var nextMove = null;
