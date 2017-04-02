@@ -303,7 +303,7 @@ module game {
 */
 
   export function shouldShowImage(row: number, col: number, whichboard: number): boolean {
-      return state.myBoard[row][col] !== "" || isProposal(row, col);    
+      return state.myBoard[row][col] !== "" || isProposal(row, col);
   }
 
   function isPiece(row: number, col: number, turnIndex: number, pieceKind: string, whichboard: number): boolean {
