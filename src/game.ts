@@ -195,11 +195,12 @@ module game {
     return isMyTurn() && !isComputer();
   }
 
-  function isMyTurn() {
+  export function isMyTurn() {
     return !didMakeMove && // you can only make one move per updateUI.
       currentUpdateUI.turnIndex >= 0 && // game is ongoing
       currentUpdateUI.yourPlayerIndex === currentUpdateUI.turnIndex; // it's my turn
   }
+
 
   export function cellClickedMy(row: number, col: number): void {
   log.info("My Board cell:", row, col);
@@ -302,9 +303,28 @@ module game {
   }
 */
 
-  export function shouldShowImage(row: number, col: number, whichboard: number): boolean {
-      return state.myBoard[row][col] !== "" || isProposal(row, col);    
+  export function shouldShowImage(row: number, col: number): boolean {
+      return state.myBoard[row][col] !== "" || isProposal(row, col);
+      /*
+      if(currentUpdateUI.turnIndex == 0) {
+        if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)
+          return true; 
+      } 
+      else {
+        if(currentUpdateUI.state.yourShip.row == row && currentUpdateUI.state.yourShip.col ==col)
+          return true;
+      }
+
+      return false;   
+      */
   }
+
+export function showText(): boolean {
+  if(currentUpdateUI.turnIndex == 0) return true;
+
+  return false;
+}
+
 
   function isPiece(row: number, col: number, turnIndex: number, pieceKind: string, whichboard: number): boolean {
       return state.myBoard[row][col] === pieceKind || (isProposal(row, col) && currentUpdateUI.turnIndex == turnIndex);
