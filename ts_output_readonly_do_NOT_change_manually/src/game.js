@@ -4,6 +4,7 @@ var game;
     game.direction = true;
     function flipDirection() { game.direction = !game.direction; }
     game.flipDirection = flipDirection;
+    game.space = true;
     game.radar = true;
     function useRadar() {
         //check status before switching radar
@@ -68,6 +69,7 @@ var game;
         };
         if (angular.equals(game.yourPlayerInfo, communityUI.yourPlayerInfo) &&
             game.currentUpdateUI && angular.equals(game.currentUpdateUI, nextUpdateUI)) {
+            // We're not calling updateUI to avoid disrupting the player if he's in the middle of a move.
         }
         else {
             // Things changed, so call updateUI.
@@ -224,7 +226,34 @@ var game;
         makeMove(nextMove);
     }
     game.cellClickedMy = cellClickedMy;
+    function move() {
+        var myRow = game.state.myShip.row;
+        var myCol = game.state.myShip.col;
+        var yourRow = game.state.yourShip.row;
+        var yourCol = game.state.yourShip.col;
+        for (var i = 0; i < 10; i++)
+            for (var j = 0; j < 10; j++) {
+                if (document.getElementById('my' + (i) + 'x' + (j)).classList.contains("moveArea"))
+                    document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
+            }
+        if (game.currentUpdateUI.yourPlayerIndex == 0) {
+            for (var i = -1; i <= 1; i++)
+                for (var j = -1; j <= 1; j++)
+                    if ((myRow + i) >= 0 && (myRow + i) < 10 && (myCol + j) >= 0 && (myCol + j) < 10) {
+                        document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)).classList.add("moveArea");
+                    }
+        }
+        else {
+            for (var i = -1; i <= 1; i++)
+                for (var j = -1; j <= 1; j++)
+                    if ((yourRow + i) >= 0 && (yourRow + i) < 10 && (yourCol + j) >= 0 && (yourCol + j) < 10)
+                        document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
+        }
+    }
+    game.move = move;
     /*
+    
+    
       export function myHover(row: number, col: number, direction: boolean): void {
         let compensate = 0;
         let length = 5-state.ship;
@@ -309,6 +338,7 @@ var game;
       }
     */
     function shouldShowImage(row, col) {
+        move();
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             if (game.state.myShip.row == row && game.state.myShip.col == col)
                 return true;
@@ -318,18 +348,6 @@ var game;
                 return true;
         }
         return false;
-        /*
-        if(currentUpdateUI.turnIndex == 0) {
-          if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)
-            return true;
-        }
-        else {
-          if(currentUpdateUI.state.yourShip.row == row && currentUpdateUI.state.yourShip.col ==col)
-            return true;
-        }
-  
-        return false;
-        */
     }
     game.shouldShowImage = shouldShowImage;
     function showText() {

@@ -62,10 +62,17 @@ body {
 .t {
   border-top: 1pt solid white;
 }
+
 .myhover {
   background-color: blue;
   opacity: 0.5;
 }
+
+.moveArea{
+  background-color: red;
+  opacity: 0.5;
+}
+
 .yourhover {
   background-color: red;
   opacity: 0.5;

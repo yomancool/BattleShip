@@ -11,6 +11,8 @@ module game {
   export let direction: boolean = true;
   export function flipDirection() { direction = !direction; }
 
+  export let space: boolean = true;
+
   export let radar: boolean = true;
   export function useRadar() {
     //check status before switching radar
@@ -215,7 +217,7 @@ module game {
     if(shipRow==row && shipCol==col)
       return false;
 
-    for(let i=-1; i<=1; i++) 
+    for(let i=-1; i<=1; i++)
       for(let j=-1; j<=1; j++) {
         if((shipRow+i == row && shipCol+j == col))
           return true;
@@ -240,8 +242,38 @@ module game {
     makeMove(nextMove);
 }
 
+export function move():void {
+  let myRow = state.myShip.row;
+  let myCol = state.myShip.col;
+
+  let yourRow = state.yourShip.row;
+  let yourCol = state.yourShip.col;
+
+  for(let i=0;i<10;i++)
+    for(let j=0;j<10;j++) {
+      if(document.getElementById('my' + (i) + 'x' + (j)).classList.contains("moveArea"))
+        document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
+    }
+
+  if(currentUpdateUI.yourPlayerIndex==0) {
+    for(let i=-1;i<=1;i++)
+      for(let j=-1;j<=1;j++)
+        if((myRow+i) >=0 && (myRow+i) < 10 && (myCol+j) >=0 && (myCol+j) < 10) {
+          document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
+        }
+  }
+  else {
+    for(let i=-1;i<=1;i++)
+      for(let j=-1;j<=1;j++)
+        if((yourRow+i) >=0 && (yourRow+i) < 10 && (yourCol+j) >=0 && (yourCol+j) < 10) 
+          document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
+  }
+}
+
 
 /*
+
+
   export function myHover(row: number, col: number, direction: boolean): void {
     let compensate = 0;
     let length = 5-state.ship;
@@ -327,6 +359,7 @@ module game {
 */
 
   export function shouldShowImage(row: number, col: number): boolean {
+    move();
     if(currentUpdateUI.yourPlayerIndex==0) {
       if(state.myShip.row == row && state.myShip.col ==col)
         return true;
@@ -336,18 +369,6 @@ module game {
         return true;
     }
     return false;
-      /*
-      if(currentUpdateUI.turnIndex == 0) {
-        if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)
-          return true; 
-      } 
-      else {
-        if(currentUpdateUI.state.yourShip.row == row && currentUpdateUI.state.yourShip.col ==col)
-          return true;
-      }
-
-      return false;   
-      */
   }
 
 export function showText(): boolean {
