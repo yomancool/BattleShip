@@ -69,7 +69,6 @@ var game;
         };
         if (angular.equals(game.yourPlayerInfo, communityUI.yourPlayerInfo) &&
             game.currentUpdateUI && angular.equals(game.currentUpdateUI, nextUpdateUI)) {
-            // We're not calling updateUI to avoid disrupting the player if he's in the middle of a move.
         }
         else {
             // Things changed, so call updateUI.
