@@ -184,6 +184,7 @@ var game;
             game.currentUpdateUI.turnIndex >= 0 &&
             game.currentUpdateUI.yourPlayerIndex === game.currentUpdateUI.turnIndex; // it's my turn
     }
+    game.isMyTurn = isMyTurn;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
         if (!isHumanTurn())
@@ -285,7 +286,7 @@ var game;
       }
     */
     function shouldShowImage(row, col) {
-        return (game.state.myBoard[row][col] !== "") || isProposal(row, col);
+        return game.state.myBoard[row][col] !== "" || isProposal(row, col);
         /*
         if(currentUpdateUI.turnIndex == 0) {
           if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)
