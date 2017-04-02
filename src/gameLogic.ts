@@ -153,7 +153,14 @@ module gameLogic {
   }
 */
 
-  export function validMove(board: Board, row: number, col: number): boolean {
+  export function validMove(row: number, col: number): boolean {
+    if(game.currentUpdateUI.yourPlayerIndex==0) {
+      if(Math.abs((row+col) - (game.currentUpdateUI.state.myShip.col + game.currentUpdateUI.state.myShip.row)) > 2)
+        return false;
+    }
+    else {
+      Math.abs((row+col) - (game.currentUpdateUI.state.yourShip.col + game.currentUpdateUI.state.yourShip.row)) > 2
+    }
     return true;
   }
 

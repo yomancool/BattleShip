@@ -197,41 +197,77 @@ module game {
     return isMyTurn() && !isComputer();
   }
 
-  function isMyTurn() {
+  export function isMyTurn() {
     return !didMakeMove && // you can only make one move per updateUI.
       currentUpdateUI.turnIndex >= 0 && // game is ongoing
       currentUpdateUI.yourPlayerIndex === currentUpdateUI.turnIndex; // it's my turn
   }
 
-  export function cellClickedMy(row: number, col: number): void {
-  log.info("My Board cell:", row, col);
-  if (!isHumanTurn()) return;
-  let nextMove: IMove = null;
-  try {
-    nextMove = gameLogic.createMove(
-        state, row, col, currentUpdateUI.turnIndex);
-  } catch (e) {
-    log.info(["Cell is already full in position:", row, col]);
-    return;
+  export function validMove(row: number, col: number): boolean {
+    let shipRow, shipCol;
+    if(currentUpdateUI.yourPlayerIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    //same index
+    if(shipRow==row && shipCol==col)
+      return false;
+
+    for(let i=-1; i<=1; i++)
+      for(let j=-1; j<=1; j++) {
+        if((shipRow+i == row && shipCol+j == col))
+          return true;
+      }
+    return false;
   }
-  // Move is legal, make it!
-  makeMove(nextMove);
+
+
+  export function cellClickedMy(row: number, col: number): void {
+    log.info("My Board cell:", row, col);
+    if (!validMove(row,col)) return;
+    if (!isHumanTurn()) return;
+    let nextMove: IMove = null;
+    try {
+      nextMove = gameLogic.createMove(
+          state, row, col, currentUpdateUI.turnIndex);
+    } catch (e) {
+      log.info(["Cell is already full in position:", row, col]);
+      return;
+    }
+    // Move is legal, make it!
+    makeMove(nextMove);
 }
 
 export function move():void {
-  let row, col;
+  let myRow = state.myShip.row;
+  let myCol = state.myShip.col;
+
+  let yourRow = state.yourShip.row;
+  let yourCol = state.yourShip.col;
+
+  for(let i=0;i<10;i++)
+    for(let j=0;j<10;j++) {
+      if(document.getElementById('my' + (i) + 'x' + (j)).classList.contains("moveArea"))
+        document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
+    }
 
   if(currentUpdateUI.yourPlayerIndex==0) {
-    row = state.myShip.row;
-    col = state.myShip.col;
+    for(let i=-1;i<=1;i++)
+      for(let j=-1;j<=1;j++)
+        if((myRow+i) >=0 && (myRow+i) < 10 && (myCol+j) >=0 && (myCol+j) < 10) {
+          document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
+        }
   }
   else {
-    row = state.yourShip.row;
-    col = state.yourShip.col;
+    for(let i=-1;i<=1;i++)
+      for(let j=-1;j<=1;j++)
+        if((yourRow+i) >=0 && (yourRow+i) < 10 && (yourCol+j) >=0 && (yourCol+j) < 10) 
+          document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
   }
-  for(let i=-1;i<=1;i++)
-    for(let j=-1;j<=1;j++)
-      document.getElementById('my' + (row+i) + 'x' + (col+i)).classList.add("moveArea");
 }
 
 
@@ -322,9 +358,25 @@ export function move():void {
   }
 */
 
-  export function shouldShowImage(row: number, col: number, whichboard: number): boolean {
-      return state.myBoard[row][col] !== "" || isProposal(row, col);
+  export function shouldShowImage(row: number, col: number): boolean {
+    move();
+    if(currentUpdateUI.yourPlayerIndex==0) {
+      if(state.myShip.row == row && state.myShip.col ==col)
+        return true;
+    }
+    else {
+      if(state.yourShip.row == row && state.yourShip.col ==col)
+        return true;
+    }
+    return false;
   }
+
+export function showText(): boolean {
+  if(currentUpdateUI.turnIndex == 0) return true;
+
+  return false;
+}
+
 
   function isPiece(row: number, col: number, turnIndex: number, pieceKind: string, whichboard: number): boolean {
       return state.myBoard[row][col] === pieceKind || (isProposal(row, col) && currentUpdateUI.turnIndex == turnIndex);
