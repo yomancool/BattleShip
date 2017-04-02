@@ -228,8 +228,13 @@ module game {
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
-    if (!validMove(row,col)) return;
+    if (!validMove(row,col)) {
+      document.getElementById("move").style.display = "block"; 
+      return;
+    }
+
     if (!isHumanTurn()) return;
+    document.getElementById("move").style.display = "none";
     let nextMove: IMove = null;
     try {
       nextMove = gameLogic.createMove(
@@ -272,94 +277,6 @@ export function move():void {
             document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
   }
 }
-
-
-/*
-
-
-  export function myHover(row: number, col: number, direction: boolean): void {
-    let compensate = 0;
-    let length = 5-state.ship;
-    let show = true;
-    if(direction==true) {
-      if(!gameLogic.validSet(state.myBoard, row, col, length, direction))
-        compensate = row + length - gameLogic.ROWS;
-
-      for(let i=0; i<length; i++) {
-        if(state.myBoard[row-compensate+i][col]!=="") {
-          show = false;
-          break;
-        }
-      }
-    }
-    else {
-      if(!gameLogic.validSet(state.myBoard, row, col, length, direction))
-        compensate = col + length - gameLogic.COLS;
-
-      for(let i=0; i<length; i++) {
-        if(state.myBoard[row][col-compensate+i]!=="") {
-          show = false;
-          break;
-        }
-      }
-    }
-
-    if(show==true) {
-      if(direction==true) {   //row
-        for(let i=0; i<length; i++) {
-          document.getElementById('my' + (row-compensate+i) + 'x' + col).classList.add("myhover");
-        }
-      }
-      else {
-        for(let i=0; i<length; i++) {
-          document.getElementById('my' + row + 'x' + (col-compensate+i)).classList.add("myhover");
-        }
-      }
-    }
-  }
-*/
-/*
-  export function myHoverLeave(row: number, col: number, direction: boolean): void {
-    /*
-    let compensate = 0;
-    let length = 5-state.ship;
-
-    if(direction==true) {
-      if(!gameLogic.validSet(state.myBoard, row, col, length, direction))
-        compensate = row + length - gameLogic.ROWS;
-    }
-    else {
-      if(!gameLogic.validSet(state.myBoard, row, col, length, direction))
-        compensate = col + length - gameLogic.COLS;
-    }
-
-    if(direction==true) {
-      for(let i=0; i<length; i++) {
-          document.getElementById('my' + (row-compensate+i) + 'x' + col).classList.remove("myhover");
-      }
-    }
-    else {
-      for(let i=0; i<length; i++) {
-          document.getElementById('my' + row + 'x' + (col-compensate+i)).classList.remove("myhover");
-      }
-    }
-
-    if(direction==true) {
-      for(let i=0; i<gameLogic.ROWS; i++) {
-        if(document.getElementById('my' + i + 'x' + col).classList.contains("myhover")) {
-          document.getElementById('my' + i + 'x' + col).classList.remove("myhover");
-        }
-      }
-    }
-    else {
-      for(let i=0; i<gameLogic.COLS; i++) {
-        if(document.getElementById('my' + row + 'x' + i).classList.contains("myhover")) {
-          document.getElementById('my' + row + 'x' + i).classList.remove("myhover");
-        }
-      }
-    }
-  }
-*/
 
   export function shouldShowImage(row: number, col: number): boolean {
     move();
