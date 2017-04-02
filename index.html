@@ -29,7 +29,7 @@
 <!-- <button ng-click="game.flipDirection()">change direction</button> -->
 <!-- <button ng-click="game.useRadar()">Use radar!</button> -->
 
-<div ng-if="!game.firstMove()">	        
+<div ng-if="!game.firstMove()" id="status">	        
 		        	<div ng-if="game.isMyTurn() && !game.isGameOver()"> 
 			        	<text>Your turn.</text>
 			       	</div>

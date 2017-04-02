@@ -256,8 +256,8 @@ export function move():void {
 
   for(let i=0;i<10;i++)
     for(let j=0;j<10;j++){
-      if(document.getElementById('my' + (i) + 'x' + (j)).classList.contains("moveArea"))
-        document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
+      if(document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
+        document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
     }
 
   if(currentUpdateUI.yourPlayerIndex==0) {

@@ -101,19 +101,21 @@ var gameLogic;
       }
     */
     function getInitialState() {
-        var board = [];
-        for (var i = 0; i < gameLogic.ROWS; i++) {
-            board[i] = [];
-            for (var j = 0; j < gameLogic.COLS; j++) {
-                board[i][j] = '';
+        if (1) {
+            var board = [];
+            for (var i = 0; i < gameLogic.ROWS; i++) {
+                board[i] = [];
+                for (var j = 0; j < gameLogic.COLS; j++) {
+                    board[i][j] = '';
+                }
             }
+            // random starting point
+            var mine = Math.floor((Math.random() * 10));
+            var your = Math.floor((Math.random() * 10));
+            board[0][mine] = 'O';
+            board[9][your] = 'O';
+            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: 9, col: your } };
         }
-        // random starting point
-        var mine = Math.floor((Math.random() * 10));
-        var your = Math.floor((Math.random() * 10));
-        board[0][mine] = 'O';
-        board[9][your] = 'O';
-        return { myBoard: board, delta: null, start: 0, myShip: { row: 0, col: mine }, yourShip: { row: 9, col: your } };
     }
     gameLogic.getInitialState = getInitialState;
     /*
