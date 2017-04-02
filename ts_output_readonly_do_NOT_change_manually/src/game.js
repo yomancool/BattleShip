@@ -235,8 +235,8 @@ var game;
         var yourCol = game.state.yourShip.col;
         for (var i = 0; i < 10; i++)
             for (var j = 0; j < 10; j++) {
-                if (document.getElementById('my' + (i) + 'x' + (j)).classList.contains("moveArea"))
-                    document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
+                if (document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
+                    document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
             }
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             for (var i = -1; i <= 1; i++) {
