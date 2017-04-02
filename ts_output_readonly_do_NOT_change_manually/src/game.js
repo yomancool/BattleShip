@@ -237,17 +237,20 @@ var game;
                     document.getElementById('my' + (i) + 'x' + (j)).classList.remove("moveArea");
             }
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
-            for (var i = -1; i <= 1; i++)
-                for (var j = -1; j <= 1; j++)
-                    if ((myRow + i) >= 0 && (myRow + i) < 10 && (myCol + j) >= 0 && (myCol + j) < 10) {
-                        document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)).classList.add("moveArea");
-                    }
+            for (var i = -1; i <= 1; i++) {
+                for (var j = -1; j <= 1; j++) {
+                    if (i != 0 || j != 0)
+                        if ((myRow + i) >= 0 && (myRow + i) < 10 && (myCol + j) >= 0 && (myCol + j) < 10)
+                            document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)).classList.add("moveArea");
+                }
+            }
         }
         else {
             for (var i = -1; i <= 1; i++)
                 for (var j = -1; j <= 1; j++)
-                    if ((yourRow + i) >= 0 && (yourRow + i) < 10 && (yourCol + j) >= 0 && (yourCol + j) < 10)
-                        document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
+                    if (i != 0 || j != 0)
+                        if ((yourRow + i) >= 0 && (yourRow + i) < 10 && (yourCol + j) >= 0 && (yourCol + j) < 10)
+                            document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
         }
     }
     game.move = move;
