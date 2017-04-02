@@ -20,7 +20,7 @@ var gameLogic;
             else {
               let length=5-shipNum;
               let compensate=0;
-              
+    
              // give compensate to out of boundary
               if(!validSet(board, row, col, length, direction)) {
                 compensate = row+length-ROWS;
@@ -66,7 +66,7 @@ var gameLogic;
             else {
               let length=5-shipNum;
               let compensate=0;
-              
+    
               //give compensate to out of boundary
               if(!validSet(board, row, col, length,direction)) {
                 compensate = col+length-COLS;
@@ -84,7 +84,7 @@ var gameLogic;
               for(let i=0; i<length; i++) {
                 board[row][col-compensate+i]='O';
               }
-              
+    
               shipNum++;
               console.log("shipNum:", shipNum);
             }

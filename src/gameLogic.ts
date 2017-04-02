@@ -38,13 +38,13 @@ module gameLogic {
         else {
           let length=5-shipNum;
           let compensate=0;
-          
-         // give compensate to out of boundary 
+
+         // give compensate to out of boundary
           if(!validSet(board, row, col, length, direction)) {
             compensate = row+length-ROWS;
           }
 
-          //check if already set 
+          //check if already set
           for(let i=0; i<length; i++) {
             //check if already set
             if(board[row-compensate+i][col]==='O') {
@@ -57,7 +57,7 @@ module gameLogic {
             board[row-compensate+i][col]='O';
           }
           
-          shipNum++;     
+          shipNum++;
           console.log("shipNum:", shipNum);
         }
       }
@@ -84,15 +84,15 @@ module gameLogic {
         else {
           let length=5-shipNum;
           let compensate=0;
-          
-          //give compensate to out of boundary 
+
+          //give compensate to out of boundary
           if(!validSet(board, row, col, length,direction)) {
             compensate = col+length-COLS;
           }
 
-          //check if already set 
+          //check if already set
           for(let i=0; i<length; i++) {
-            //check if already set 
+            //check if already set
             if(board[row][col-compensate+i]==='O') {
               window.alert("Already set ship here");
               return {myBoard: originBoard ,yourBoard: state.yourBoard, delta:null, ship: shipNum, start: state.start};
@@ -102,8 +102,8 @@ module gameLogic {
           for(let i=0; i<length; i++) {
             board[row][col-compensate+i]='O';
           }
-          
-          shipNum++;     
+
+          shipNum++;
           console.log("shipNum:", shipNum);
         }
       }
@@ -133,7 +133,7 @@ module gameLogic {
     let your = Math.floor((Math.random() * 10));
     board[0][mine] = 'O';
     board[9][your] = 'O';
-    
+
     return {myBoard: board, delta: null, start:0, myShip: {row:0,col:mine}, yourShip: {row:9,col:your} };
   }
 /*
@@ -158,8 +158,8 @@ module gameLogic {
   }
 
   function getWinner(board: Board): string {
-    for (let i = 0; i < ROWS; i++) 
-      for (let j = 0; j < COLS; j++) 
+    for (let i = 0; i < ROWS; i++)
+      for (let j = 0; j < COLS; j++)
         if(board[i][j]=='X') {
           console.log("Game Ends ");
           return "I lose!";
@@ -236,12 +236,10 @@ module gameLogic {
 
     return {endMatchScores: endMatchScores, turnIndex: turnIndex, state: state};
   }
-  
+
   export function createInitialMove(): IMove {
     return {endMatchScores: null, turnIndex: 0,
         state: getInitialState()};
   }
 
 }
-
-

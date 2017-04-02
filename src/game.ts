@@ -11,6 +11,8 @@ module game {
   export let direction: boolean = true;
   export function flipDirection() { direction = !direction; }
 
+  export let space: boolean = true;
+
   export let radar: boolean = true;
   export function useRadar() {
     //check status before switching radar
@@ -216,8 +218,26 @@ module game {
   makeMove(nextMove);
 }
 
+export function move():void {
+  let row, col;
+
+  if(currentUpdateUI.yourPlayerIndex==0) {
+    row = state.myShip.row;
+    col = state.myShip.col;
+  }
+  else {
+    row = state.yourShip.row;
+    col = state.yourShip.col;
+  }
+  for(let i=-1;i<=1;i++)
+    for(let j=-1;j<=1;j++)
+      document.getElementById('my' + (row+i) + 'x' + (col+i)).classList.add("moveArea");
+}
+
 
 /*
+
+
   export function myHover(row: number, col: number, direction: boolean): void {
     let compensate = 0;
     let length = 5-state.ship;

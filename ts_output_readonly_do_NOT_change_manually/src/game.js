@@ -4,6 +4,7 @@ var game;
     game.direction = true;
     function flipDirection() { game.direction = !game.direction; }
     game.flipDirection = flipDirection;
+    game.space = true;
     game.radar = true;
     function useRadar() {
         //check status before switching radar
@@ -68,6 +69,7 @@ var game;
         };
         if (angular.equals(game.yourPlayerInfo, communityUI.yourPlayerInfo) &&
             game.currentUpdateUI && angular.equals(game.currentUpdateUI, nextUpdateUI)) {
+            // We're not calling updateUI to avoid disrupting the player if he's in the middle of a move.
         }
         else {
             // Things changed, so call updateUI.
@@ -200,7 +202,24 @@ var game;
         makeMove(nextMove);
     }
     game.cellClickedMy = cellClickedMy;
+    function move() {
+        var row, col;
+        if (game.currentUpdateUI.yourPlayerIndex == 0) {
+            row = game.state.myShip.row;
+            col = game.state.myShip.col;
+        }
+        else {
+            row = game.state.yourShip.row;
+            col = game.state.yourShip.col;
+        }
+        for (var i = -1; i <= 1; i++)
+            for (var j = -1; j <= 1; j++)
+                document.getElementById('my' + (row + i) + 'x' + (col + i)).classList.add("moveArea");
+    }
+    game.move = move;
     /*
+    
+    
       export function myHover(row: number, col: number, direction: boolean): void {
         let compensate = 0;
         let length = 5-state.ship;
