@@ -286,7 +286,15 @@ var game;
       }
     */
     function shouldShowImage(row, col) {
-        return game.state.myBoard[row][col] !== "" || isProposal(row, col);
+        if (game.currentUpdateUI.yourPlayerIndex == 0) {
+            if (game.state.myShip.row == row && game.state.myShip.col == col)
+                return true;
+        }
+        else {
+            if (game.state.yourShip.row == row && game.state.yourShip.col == col)
+                return true;
+        }
+        return false;
         /*
         if(currentUpdateUI.turnIndex == 0) {
           if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)

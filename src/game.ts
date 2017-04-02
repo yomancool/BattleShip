@@ -304,7 +304,15 @@ module game {
 */
 
   export function shouldShowImage(row: number, col: number): boolean {
-      return state.myBoard[row][col] !== "" || isProposal(row, col);
+    if(currentUpdateUI.yourPlayerIndex==0) {
+      if(state.myShip.row == row && state.myShip.col ==col)
+        return true;
+    }
+    else {
+      if(state.yourShip.row == row && state.yourShip.col ==col)
+        return true;
+    }
+    return false;
       /*
       if(currentUpdateUI.turnIndex == 0) {
         if(currentUpdateUI.state.myShip.row == row && currentUpdateUI.state.myShip.col ==col)
