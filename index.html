@@ -30,17 +30,19 @@
 <!-- <button ng-click="game.useRadar()">Use radar!</button> -->
 
 <div ng-if="!game.firstMove()" id="status">	        
-		        	<div ng-if="game.isMyTurn() && !game.isGameOver()"> 
-			        	<text>Your turn.</text>
-			       	</div>
-			       	<div ng-if="!game.isMyTurn() && !game.isGameOver()"> 
-                <text>Opponent's turn.</text>
-			       	</div>
-			       	<div ng-if="game.isGameOver()"> 
-			        	<text><br/></text>
-			       	</div>
-		        </div>
+      <div ng-if="game.isMyTurn() && !game.isGameOver()"> 
+        <text>Your turn.</text>
+      </div>
+      <div ng-if="!game.isMyTurn() && !game.isGameOver()"> 
+        <text>Opponent's turn.</text>
+      </div>
+      <div ng-if="game.isGameOver()"> 
+        <text><br/></text>
+      </div>
+    </div>
 </div>
+
+<div id="shadow"> </div>
 
 <div id="move" style="display:none">invalid move!</div>
 <div id="gameArea">
