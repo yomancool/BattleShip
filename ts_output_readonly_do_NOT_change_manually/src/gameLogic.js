@@ -114,7 +114,7 @@ var gameLogic;
             var your = Math.floor((Math.random() * 10));
             board[0][mine] = 'O';
             board[9][your] = 'O';
-            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: 9, col: your }, move: false };
+            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: 9, col: your }, move: false, shot: false };
         }
     }
     gameLogic.getInitialState = getInitialState;
@@ -179,15 +179,15 @@ var gameLogic;
             myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
             yourP = { row: row, col: col };
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false };
     }
     gameLogic.moveState = moveState;
     function shotState(stateBeforeMove, turnIndexBeforeMove, row, col) {
-        var myP;
-        var yourP;
         var originRow;
         var originCol;
         var board = stateBeforeMove.myBoard;
+        var myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
+        var yourP = { row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col };
         if (board[row][col] == '') {
             board[row][col] = 'M';
             document.getElementById('my' + (row) + 'x' + (col)).classList.add("missArea");
@@ -199,8 +199,6 @@ var gameLogic;
                 if (row != originRow && col != originCol)
                     if (board[row][col] == 'O')
                         board[row][col] == 'X';
-                myP = { row: originRow, col: originCol };
-                yourP = { row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col };
             }
             else {
                 originRow = stateBeforeMove.yourShip.row;
@@ -212,7 +210,7 @@ var gameLogic;
                 yourP = { row: originRow, col: originCol };
             }
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true };
     }
     gameLogic.shotState = shotState;
     function createMove(stateBeforeMove, row, col, turnIndexBeforeMove) {

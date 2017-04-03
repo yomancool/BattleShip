@@ -33,7 +33,6 @@ var game;
         resizeGameAreaService.setWidthToHeight(1);
         gameService.setGame({
             updateUI: updateUI,
-            communityUI: communityUI,
             getStateForOgImage: null,
         });
     }
@@ -55,10 +54,11 @@ var game;
     function getTranslations() {
         return {};
     }
-    function communityUI(communityUI) {
+    /*
+      export function communityUI(communityUI: ICommunityUI) {
         log.info("Game got communityUI:", communityUI);
         // If only proposals changed, then do NOT call updateUI. Then update proposals.
-        var nextUpdateUI = {
+        let nextUpdateUI: IUpdateUI = {
             playersInfo: [],
             playMode: communityUI.yourPlayerIndex,
             numberOfPlayers: communityUI.numberOfPlayers,
@@ -66,32 +66,33 @@ var game;
             turnIndex: communityUI.turnIndex,
             endMatchScores: communityUI.endMatchScores,
             yourPlayerIndex: communityUI.yourPlayerIndex,
-        };
-        if (angular.equals(game.yourPlayerInfo, communityUI.yourPlayerInfo) &&
-            game.currentUpdateUI && angular.equals(game.currentUpdateUI, nextUpdateUI)) {
-        }
-        else {
-            // Things changed, so call updateUI.
-            updateUI(nextUpdateUI);
+          };
+        if (angular.equals(yourPlayerInfo, communityUI.yourPlayerInfo) &&
+            currentUpdateUI && angular.equals(currentUpdateUI, nextUpdateUI)) {
+          // We're not calling updateUI to avoid disrupting the player if he's in the middle of a move.
+        } else {
+          // Things changed, so call updateUI.
+          updateUI(nextUpdateUI);
         }
         // This must be after calling updateUI, because we nullify things there (like playerIdToProposal&proposals&etc)
-        game.yourPlayerInfo = communityUI.yourPlayerInfo;
-        var playerIdToProposal = communityUI.playerIdToProposal;
-        game.didMakeMove = !!playerIdToProposal[communityUI.yourPlayerInfo.playerId];
-        game.proposals = [];
-        for (var i = 0; i < gameLogic.ROWS; i++) {
-            game.proposals[i] = [];
-            for (var j = 0; j < gameLogic.COLS; j++) {
-                game.proposals[i][j] = 0;
-            }
+        yourPlayerInfo = communityUI.yourPlayerInfo;
+        let playerIdToProposal = communityUI.playerIdToProposal;
+        didMakeMove = !!playerIdToProposal[communityUI.yourPlayerInfo.playerId];
+        proposals = [];
+        for (let i = 0; i < gameLogic.ROWS; i++) {
+          proposals[i] = [];
+          for (let j = 0; j < gameLogic.COLS; j++) {
+            proposals[i][j] = 0;
+          }
         }
-        for (var playerId in playerIdToProposal) {
-            var proposal = playerIdToProposal[playerId];
-            var delta = proposal.data;
-            game.proposals[delta.row][delta.col]++;
+        for (let playerId in playerIdToProposal) {
+          let proposal = playerIdToProposal[playerId];
+          let delta = proposal.data;
+          proposals[delta.row][delta.col]++;
         }
-    }
-    game.communityUI = communityUI;
+      }
+    
+    */
     function isProposal(row, col) {
         return game.proposals && game.proposals[row][col] > 0;
     }
@@ -111,6 +112,7 @@ var game;
         clearAnimationTimeout();
         game.state = params.state;
         if (isFirstMove()) {
+            log.info("initial move!!!!!!!!!");
             game.state = gameLogic.getInitialState();
         }
         // We calculate the AI move only after the animation finishes,
@@ -147,7 +149,7 @@ var game;
         }
         game.didMakeMove = true;
         if (!game.proposals) {
-            gameService.makeMove(move);
+            gameService.makeMove(move, null);
         }
         else {
             var delta = move.state.delta;
@@ -160,7 +162,6 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
-            gameService.communityMove(myProposal, move);
         }
     }
     function isFirstMove() {
@@ -190,7 +191,7 @@ var game;
         var shipRow, shipCol;
         if (game.state.myBoard[row][col] == 'M')
             return false;
-        if (game.state.move == true)
+        if (game.state.shot == true)
             return true;
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             shipRow = game.state.myShip.row;
@@ -228,8 +229,14 @@ var game;
             log.info(["Cell is already full in position:", row, col]);
             return;
         }
+        var nextUpdateUI = game.currentUpdateUI;
+        nextUpdateUI.state = nextMove.state;
+        nextUpdateUI.turnIndex = nextMove.turnIndex;
+        updateUI(nextUpdateUI);
         // Move is legal, make it!
-        makeMove(nextMove);
+        console.log("nextMove: ", nextMove);
+        if (game.state.shot == true)
+            makeMove(nextMove);
     }
     game.cellClickedMy = cellClickedMy;
     function move() {
@@ -239,15 +246,17 @@ var game;
         var yourCol = game.state.yourShip.col;
         for (var i = 0; i < 10; i++)
             for (var j = 0; j < 10; j++) {
-                if (document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
-                    document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
+                if (document.getElementById('my' + i + 'x' + j) !== null)
+                    if (document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
+                        document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
             }
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             for (var i = -1; i <= 1; i++) {
                 for (var j = -1; j <= 1; j++) {
                     if (i != 0 || j != 0)
                         if ((myRow + i) >= 0 && (myRow + i) < 10 && (myCol + j) >= 0 && (myCol + j) < 10)
-                            document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)).classList.add("moveArea");
+                            if (document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)) !== null)
+                                document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)).classList.add("moveArea");
                 }
             }
         }
@@ -256,7 +265,8 @@ var game;
                 for (var j = -1; j <= 1; j++)
                     if (i != 0 || j != 0)
                         if ((yourRow + i) >= 0 && (yourRow + i) < 10 && (yourCol + j) >= 0 && (yourCol + j) < 10)
-                            document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
+                            if (document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)) !== null)
+                                document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
         }
     }
     game.move = move;
