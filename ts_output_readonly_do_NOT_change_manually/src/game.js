@@ -188,6 +188,10 @@ var game;
     game.isMyTurn = isMyTurn;
     function validMove(row, col) {
         var shipRow, shipCol;
+        if (game.state.myBoard[row][col] == 'M')
+            return false;
+        if (game.state.move == true)
+            return true;
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             shipRow = game.state.myShip.row;
             shipCol = game.state.myShip.col;

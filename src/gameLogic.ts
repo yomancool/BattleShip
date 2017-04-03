@@ -12,6 +12,7 @@ interface IState {
   start: number;
   myShip: BoardDelta;
   yourShip: BoardDelta;
+  move: boolean;
 }
 
 import gameService = gamingPlatform.gameService;
@@ -136,7 +137,7 @@ module gameLogic {
       board[0][mine] = 'O';
       board[9][your] = 'O';
       
-      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:9,col:your} };
+      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:9,col:your}, move:false};
     }  
 }
 /*
@@ -167,14 +168,84 @@ module gameLogic {
     return true;
   }
 
-  function getWinner(board: Board): string {
+  function getWinner(board: Board, state: IState): string {
     for (let i = 0; i < ROWS; i++)
       for (let j = 0; j < COLS; j++)
         if(board[i][j]=='X') {
           console.log("Game Ends ");
-          return "I lose!";
+          if(i==state.myShip.row && j==state.myShip.col)
+            return "1";
+          else
+            return "0";
         }
     return '';
+  }
+  
+  export function moveState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number): IState {
+    let myP: BoardDelta;
+    let yourP: BoardDelta;
+    let originRow;
+    let originCol;
+    let board = stateBeforeMove.myBoard;
+    if(turnIndexBeforeMove==0) {  //I move
+          originRow = stateBeforeMove.myShip.row;
+          originCol = stateBeforeMove.myShip.col;
+
+          board[originRow][originCol] = '';
+          board[row][col] = 'O';
+          
+          myP = {row: row, col: col};
+          yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
+        }
+        else {
+          originRow = stateBeforeMove.yourShip.row;
+          originCol = stateBeforeMove.yourShip.col;
+
+          board[originRow][originCol] = '';
+          board[row][col] = 'O';
+
+          myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
+          yourP = {row: row, col: col};
+        }
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true}
+  }
+
+    export function shotState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number): IState {
+    let myP: BoardDelta;
+    let yourP: BoardDelta;
+    let originRow;
+    let originCol;
+    let board = stateBeforeMove.myBoard;
+    
+    if(board[row][col]=='') {//miss 
+      board[row][col] = 'M';
+      document.getElementById('my' + (row) + 'x' + (col)).classList.add("missArea");
+    }
+    else {  //hit
+      if(turnIndexBeforeMove==0) {  //I move
+          originRow = stateBeforeMove.myShip.row;
+          originCol = stateBeforeMove.myShip.col;
+          if(row != originRow && col != originCol)
+            if(board[row][col]=='O')
+              board[row][col]=='X';
+
+          myP = {row: originRow, col: originCol};
+          yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
+        }
+        else {
+          originRow = stateBeforeMove.yourShip.row;
+          originCol = stateBeforeMove.yourShip.col;
+
+          if(row != originRow && col != originCol)
+            if(board[row][col]=='O')
+              board[row][col]=='X';
+
+          myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
+          yourP = {row: originRow, col: originCol};
+        }
+    }
+    
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false}
   }
 
 
@@ -185,68 +256,44 @@ module gameLogic {
     if (!stateBeforeMove) {
       stateBeforeMove = getInitialState();
     }
-
     let myBoard: Board = stateBeforeMove.myBoard;
 
-    if(myBoard[row][col] === 'M') {
-      console.log("has been destroy!!");
-      throw new Error("has been destroy!!");
-    }
-    else if(myBoard[row][col] === 'O') {
-      console.log("opponent is there!");
-      throw new Error("opponent is there!!");
-    }
-
-    if (getWinner(myBoard) !== '') {
+    if (getWinner(myBoard,stateBeforeMove) !== '') {
       throw new Error("Can only make a move if the game is not over!");
     }
 
-    let myBoardAfterMove = angular.copy(myBoard);
-
-    let myP: BoardDelta;
-    let yourP: BoardDelta;
-    let originRow;
-    let originCol;
-
-    if(turnIndexBeforeMove==0) {  //I move
-      originRow = stateBeforeMove.myShip.row;
-      originCol = stateBeforeMove.myShip.col;
-
-      myBoardAfterMove[originRow][originCol] = '';
-      myBoardAfterMove[row][col] = 'O';
-      
-      myP = {row: row, col: col};
-      yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
-    }
-    else {
-      originRow = stateBeforeMove.yourShip.row;
-      originCol = stateBeforeMove.yourShip.col;
-
-      myBoardAfterMove[originRow][originCol] = '';
-      myBoardAfterMove[row][col] = 'O';
-
-      myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
-      yourP = {row: row, col: col};
-    }
-
-    let winner = getWinner(myBoardAfterMove);
     let endMatchScores: number[];
     let turnIndex: number;
-    if (winner !== '') {
-      // Game over.
-      turnIndex = -1;
-      endMatchScores = winner === 'X' ? [1, 0] : winner === 'O' ? [0, 1] : [0, 0];
-    } else {
-      // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
+    let stateAfterMove;
+
+    if(!stateBeforeMove.move) {
+      stateAfterMove = moveState(stateBeforeMove,turnIndexBeforeMove,row,col);
+      turnIndex = turnIndexBeforeMove;
+      endMatchScores = null;
+    }
+    else {
+      stateAfterMove = shotState(stateBeforeMove,turnIndexBeforeMove,row,col);
       turnIndex = 1 - turnIndexBeforeMove;
       endMatchScores = null;
     }
 
+    let myBoardAfterMove = stateAfterMove.myBoard;
+
+    let winner = getWinner(myBoardAfterMove,stateAfterMove);
+    if (winner !== '') {
+      // Game over.
+      turnIndex = -1;
+      endMatchScores = winner === "0" ? [1, 0] : winner === "1" ? [0, 1] : [0, 0];
+    } else {
+      // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
+    }
+
     let delta: BoardDelta = {row: row, col: col};
 
-    let state: IState = {delta: delta, myBoard: myBoardAfterMove, myShip: myP, yourShip: yourP, start: 1};
+    let state: IState = stateAfterMove;
 
     return {endMatchScores: endMatchScores, turnIndex: turnIndex, state: state};
+
   }
 
   export function createInitialMove(): IMove {

@@ -71,18 +71,21 @@ body {
 /* ********* */
 
 #status {
-  position:fixed;
-  font-size: 400%;
+  position:relative;
+  font-size: 32px;
+  color: white;
+  font-family: 'Lato', sans-serif;
   opacity: 0;
   animation: status 2.8s ease-out;
   -webkit-animation-delay: 1s; /* Safari 4.0 - 8.0 */
   animation-delay: 1s;
 }
 @keyframes status {
-  0% {z-index:6;left:100%;top:50%; opacity:1;}
-  20% {z-index:6; left:50%;top:50%; opacity:1;}
-  80% {z-index:6; left:40%;top:50%; opacity:1;}
-  100% {z-index:0; left:-50%;top:50%;}
+  0% {z-index:6;left:50%;top:50%; opacity:0;}
+  25% {z-index:6; left:50%;top:50%; opacity:1;}
+  50% {}
+  75% {z-index:6; left:50%;top:50%; opacity:0;}
+  100% {z-index:0; left:50%;top:50%; }
   }
 
 .r {
@@ -112,7 +115,9 @@ body {
 {
   opacity:1;
 }
-
+.missArea{
+  background-color: black;
+}
 .yourhover {
   background-color: red;
   opacity: 0.5;
