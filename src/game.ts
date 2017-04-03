@@ -205,6 +205,13 @@ module game {
 
   export function validMove(row: number, col: number): boolean {
     let shipRow, shipCol;
+
+    if(state.myBoard[row][col]=='M')
+      return false;
+    
+    if(state.move==true)  //shot state
+      return true;
+
     if(currentUpdateUI.yourPlayerIndex==0) {
       shipRow = state.myShip.row;
       shipCol = state.myShip.col;
