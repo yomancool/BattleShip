@@ -43,7 +43,6 @@ module game {
     resizeGameAreaService.setWidthToHeight(1);
     gameService.setGame({
       updateUI: updateUI,
-      communityUI: communityUI,
       getStateForOgImage: null,
     });
   }
@@ -67,6 +66,7 @@ module game {
     return {};
   }
 
+/*
   export function communityUI(communityUI: ICommunityUI) {
     log.info("Game got communityUI:", communityUI);
     // If only proposals changed, then do NOT call updateUI. Then update proposals.
@@ -103,6 +103,8 @@ module game {
       proposals[delta.row][delta.col]++;
     }
   }
+
+*/
   export function isProposal(row: number, col: number) {
     return proposals && proposals[row][col] > 0;
   }
@@ -120,6 +122,7 @@ module game {
     clearAnimationTimeout();
     state = params.state;
     if (isFirstMove()) {
+      log.info("initial move!!!!!!!!!");
       state = gameLogic.getInitialState();
     }
     // We calculate the AI move only after the animation finishes,
@@ -159,7 +162,7 @@ module game {
     didMakeMove = true;
 
     if (!proposals) {
-      gameService.makeMove(move);
+      gameService.makeMove(move,null);
     } else {
       let delta = move.state.delta;
       let myProposal:IProposal = {
@@ -171,7 +174,7 @@ module game {
       if (proposals[delta.row][delta.col] < 2) {
         move = null;
       }
-      gameService.communityMove(myProposal, move);
+      //gameService.communityMove(move, myProposal);
     }
   }
 
@@ -209,7 +212,7 @@ module game {
     if(state.myBoard[row][col]=='M')
       return false;
     
-    if(state.move==true)  //shot state
+    if(state.shot==true)  //shot state
       return true;
 
     if(currentUpdateUI.yourPlayerIndex==0) {
@@ -235,6 +238,7 @@ module game {
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
+    
     if (!validMove(row,col)) {
       document.getElementById("move").style.display = "block"; 
       return;
@@ -242,6 +246,7 @@ module game {
 
     if (!isHumanTurn()) return;
     document.getElementById("move").style.display = "none";
+    
     let nextMove: IMove = null;
     try {
       nextMove = gameLogic.createMove(
@@ -250,11 +255,19 @@ module game {
       log.info(["Cell is already full in position:", row, col]);
       return;
     }
+    let nextUpdateUI: IUpdateUI = currentUpdateUI;
+    nextUpdateUI.state = nextMove.state;
+    nextUpdateUI.turnIndex = nextMove.turnIndex;
+    updateUI(nextUpdateUI);
     // Move is legal, make it!
-    makeMove(nextMove);
+    console.log("nextMove: ",nextMove);
+    if(state.shot==true)
+      makeMove(nextMove);
 }
 
+
 export function move():void {
+
   let myRow = state.myShip.row;
   let myCol = state.myShip.col;
 
@@ -263,8 +276,9 @@ export function move():void {
 
   for(let i=0;i<10;i++)
     for(let j=0;j<10;j++){
-      if(document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
-        document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
+      if(document.getElementById('my' + i + 'x' + j)!==null)
+        if(document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
+          document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
     }
 
   if(currentUpdateUI.yourPlayerIndex==0) {
@@ -272,7 +286,8 @@ export function move():void {
       for(let j=-1;j<=1;j++){
         if (i!=0 || j!=0)
           if((myRow+i) >=0 && (myRow+i) < 10 && (myCol+j) >=0 && (myCol+j) < 10) 
-                  document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
+            if(document.getElementById('my' + (myRow+i) + 'x' + (myCol+j))!==null)
+              document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
       }
     } 
   }
@@ -281,7 +296,8 @@ export function move():void {
       for(let j=-1;j<=1;j++)
         if (i!=0 || j!=0)
           if((yourRow+i) >=0 && (yourRow+i) < 10 && (yourCol+j) >=0 && (yourCol+j) < 10)
-            document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
+            if(document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j))!==null)
+              document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
   }
 }
 

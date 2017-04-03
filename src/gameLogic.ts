@@ -13,6 +13,7 @@ interface IState {
   myShip: BoardDelta;
   yourShip: BoardDelta;
   move: boolean;
+  shot: boolean;
 }
 
 import gameService = gamingPlatform.gameService;
@@ -137,7 +138,7 @@ module gameLogic {
       board[0][mine] = 'O';
       board[9][your] = 'O';
       
-      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:9,col:your}, move:false};
+      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:9,col:your}, move:false, shot:false};
     }  
 }
 /*
@@ -207,16 +208,17 @@ module gameLogic {
           myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
           yourP = {row: row, col: col};
         }
-    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true}
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true, shot:false}
   }
 
     export function shotState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number): IState {
-    let myP: BoardDelta;
-    let yourP: BoardDelta;
     let originRow;
     let originCol;
     let board = stateBeforeMove.myBoard;
     
+    let myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
+    let yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
+
     if(board[row][col]=='') {//miss 
       board[row][col] = 'M';
       document.getElementById('my' + (row) + 'x' + (col)).classList.add("missArea");
@@ -228,9 +230,6 @@ module gameLogic {
           if(row != originRow && col != originCol)
             if(board[row][col]=='O')
               board[row][col]=='X';
-
-          myP = {row: originRow, col: originCol};
-          yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
         }
         else {
           originRow = stateBeforeMove.yourShip.row;
@@ -245,7 +244,7 @@ module gameLogic {
         }
     }
     
-    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false}
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false, shot:true}
   }
 
 
