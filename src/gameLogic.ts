@@ -247,10 +247,6 @@ module gameLogic {
     return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false, shot:true}
   }
 
-  export function abc() {
-    ;
-  }
-  
   export function createMove(
       stateBeforeMove: IState, row: number, col: number, turnIndexBeforeMove: number): IMove {
 

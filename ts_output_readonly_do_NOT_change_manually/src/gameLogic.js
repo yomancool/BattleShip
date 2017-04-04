@@ -213,10 +213,6 @@ var gameLogic;
         return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true };
     }
     gameLogic.shotState = shotState;
-    function abc() {
-        ;
-    }
-    gameLogic.abc = abc;
     function createMove(stateBeforeMove, row, col, turnIndexBeforeMove) {
         if (!stateBeforeMove) {
             stateBeforeMove = getInitialState();

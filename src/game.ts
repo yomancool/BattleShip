@@ -208,11 +208,12 @@ module game {
 
   export function validMove(row: number, col: number): boolean {
     let shipRow, shipCol;
+    console.log("state: ", state);
 
     if(state.myBoard[row][col]=='M')
       return false;
-    
-    if(state.shot==true)  //shot state
+
+    if(state.move==true && state.shot==false)
       return true;
 
     if(currentUpdateUI.yourPlayerIndex==0) {
@@ -258,6 +259,7 @@ module game {
     let nextUpdateUI: IUpdateUI = currentUpdateUI;
     nextUpdateUI.state = nextMove.state;
     nextUpdateUI.turnIndex = nextMove.turnIndex;
+    state = nextUpdateUI.state;
     updateUI(nextUpdateUI);
     // Move is legal, make it!
     console.log("nextMove: ",nextMove);

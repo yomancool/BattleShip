@@ -189,9 +189,10 @@ var game;
     game.isMyTurn = isMyTurn;
     function validMove(row, col) {
         var shipRow, shipCol;
+        console.log("state: ", game.state);
         if (game.state.myBoard[row][col] == 'M')
             return false;
-        if (game.state.shot == true)
+        if (game.state.move == true && game.state.shot == false)
             return true;
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             shipRow = game.state.myShip.row;
@@ -232,6 +233,7 @@ var game;
         var nextUpdateUI = game.currentUpdateUI;
         nextUpdateUI.state = nextMove.state;
         nextUpdateUI.turnIndex = nextMove.turnIndex;
+        game.state = nextUpdateUI.state;
         updateUI(nextUpdateUI);
         // Move is legal, make it!
         console.log("nextMove: ", nextMove);
