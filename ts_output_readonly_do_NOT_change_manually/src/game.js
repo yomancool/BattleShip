@@ -187,13 +187,8 @@ var game;
             game.currentUpdateUI.yourPlayerIndex === game.currentUpdateUI.turnIndex; // it's my turn
     }
     game.isMyTurn = isMyTurn;
-    function validMove(row, col) {
+    function validShot(row, col) {
         var shipRow, shipCol;
-        console.log("state: ", game.state);
-        if (game.state.myBoard[row][col] == 'M')
-            return false;
-        if (game.state.move == true && game.state.shot == false)
-            return true;
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             shipRow = game.state.myShip.row;
             shipCol = game.state.myShip.col;
@@ -202,20 +197,52 @@ var game;
             shipRow = game.state.yourShip.row;
             shipCol = game.state.yourShip.col;
         }
-        //same index
         if (shipRow == row && shipCol == col)
             return false;
+        return true;
+    }
+    game.validShot = validShot;
+    function validMove(row, col) {
+        if (game.state.myBoard[row][col] == 'M') {
+            console.log("invalid Move!");
+            return false;
+        }
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.yourPlayerIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        console.log("row: ", shipRow, "col: ", shipCol);
         for (var i = -1; i <= 1; i++)
             for (var j = -1; j <= 1; j++) {
-                if ((shipRow + i == row && shipCol + j == col))
+                if (shipRow + i == row && shipCol + j == col) {
+                    console.log("valid Move!");
                     return true;
+                }
             }
         return false;
     }
     game.validMove = validMove;
+    function valid(row, col) {
+        var shipRow, shipCol;
+        console.log("judging valid state: ", game.state);
+        if (game.state.move == false && game.state.shot == false) {
+            console.log("move!!!");
+            return validMove(row, col);
+        }
+        else {
+            console.log("shot!!!");
+            return validShot(row, col);
+        }
+    }
+    game.valid = valid;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
-        if (!validMove(row, col)) {
+        if (!valid(row, col)) {
             document.getElementById("move").style.display = "block";
             return;
         }
@@ -234,6 +261,7 @@ var game;
         nextUpdateUI.state = nextMove.state;
         nextUpdateUI.turnIndex = nextMove.turnIndex;
         game.state = nextUpdateUI.state;
+        console.log("state after move: ", game.state);
         updateUI(nextUpdateUI);
         // Move is legal, make it!
         console.log("nextMove: ", nextMove);
@@ -241,7 +269,7 @@ var game;
             makeMove(nextMove);
     }
     game.cellClickedMy = cellClickedMy;
-    function move() {
+    function moveArea() {
         var myRow = game.state.myShip.row;
         var myCol = game.state.myShip.col;
         var yourRow = game.state.yourShip.row;
@@ -271,9 +299,35 @@ var game;
                                 document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
         }
     }
-    game.move = move;
+    game.moveArea = moveArea;
+    function MissArea() {
+        for (var i = 0; i < 10; i++)
+            for (var j = 0; j < 10; j++) {
+                if (document.getElementById('my' + i + 'x' + j) !== null)
+                    if (game.state.myBoard[i][j] == 'M')
+                        document.getElementById('my' + i + 'x' + j).classList.add("missArea");
+            }
+    }
+    game.MissArea = MissArea;
+    function shotArea(row, col) {
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.yourPlayerIndex == 1) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        if (game.state.myBoard[shipRow][shipCol] == 'X')
+            document.getElementById('my' + (shipRow) + 'x' + (shipCol)).classList.add("shotArea");
+    }
+    game.shotArea = shotArea;
     function shouldShowImage(row, col) {
-        move();
+        moveArea();
+        MissArea();
+        shotArea(row, col);
+        //console.log("state: ",state);
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             if (game.state.myShip.row == row && game.state.myShip.col == col)
                 return true;
@@ -291,13 +345,6 @@ var game;
         return false;
     }
     game.showText = showText;
-    function isPiece(row, col, turnIndex, pieceKind, whichboard) {
-        return game.state.myBoard[row][col] === pieceKind || (isProposal(row, col) && game.currentUpdateUI.turnIndex == turnIndex);
-    }
-    function isPieceM(row, col, whichboard) {
-        return isPiece(row, col, 1, 'M', whichboard);
-    }
-    game.isPieceM = isPieceM;
     function shouldSlowlyAppear(row, col) {
         return game.state.delta &&
             game.state.delta.row === row && game.state.delta.col === col;
