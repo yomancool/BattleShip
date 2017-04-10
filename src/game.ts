@@ -206,16 +206,8 @@ module game {
       currentUpdateUI.yourPlayerIndex === currentUpdateUI.turnIndex; // it's my turn
   }
 
-  export function validMove(row: number, col: number): boolean {
+  export function validShot(row:number, col:number): boolean {
     let shipRow, shipCol;
-    console.log("state: ", state);
-
-    if(state.myBoard[row][col]=='M')
-      return false;
-
-    if(state.move==true && state.shot==false)
-      return true;
-
     if(currentUpdateUI.yourPlayerIndex==0) {
       shipRow = state.myShip.row;
       shipCol = state.myShip.col;
@@ -224,23 +216,60 @@ module game {
       shipRow = state.yourShip.row;
       shipCol = state.yourShip.col;
     }
-    //same index
-    if(shipRow==row && shipCol==col)
+    if(shipRow==row && shipCol==col)  //shot myself
       return false;
+    
+    return true;
+
+  }
+
+  export function validMove(row:number, col:number): boolean {
+
+    if(state.myBoard[row][col]=='M') {
+      console.log("invalid Move!");
+      return false;
+    }
+    
+    let shipRow, shipCol;
+    if(currentUpdateUI.yourPlayerIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    console.log("row: ",shipRow,"col: ",shipCol);
 
     for(let i=-1; i<=1; i++)
       for(let j=-1; j<=1; j++) {
-        if((shipRow+i == row && shipCol+j == col))
+        if(shipRow+i == row && shipCol+j == col) {
+          console.log("valid Move!");
           return true;
+        }
       }
     return false;
+  }
+
+  export function valid(row: number, col: number): boolean {
+    let shipRow, shipCol;
+    console.log("judging valid state: ", state);
+    
+    if(state.move==false && state.shot==false) {
+      console.log("move!!!");
+      return validMove(row,col);
+    }
+    else {
+      console.log("shot!!!");
+      return validShot(row,col);
+    }
   }
 
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
     
-    if (!validMove(row,col)) {
+    if (!valid(row,col)) {
       document.getElementById("move").style.display = "block"; 
       return;
     }
@@ -260,6 +289,7 @@ module game {
     nextUpdateUI.state = nextMove.state;
     nextUpdateUI.turnIndex = nextMove.turnIndex;
     state = nextUpdateUI.state;
+    console.log("state after move: ",state);
     updateUI(nextUpdateUI);
     // Move is legal, make it!
     console.log("nextMove: ",nextMove);
@@ -268,7 +298,7 @@ module game {
 }
 
 
-export function move():void {
+export function moveArea():void {
 
   let myRow = state.myShip.row;
   let myCol = state.myShip.col;
@@ -302,9 +332,34 @@ export function move():void {
               document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
   }
 }
+  export function MissArea(): void {
+    for(let i=0;i<10;i++)
+      for(let j=0;j<10;j++){
+        if(document.getElementById('my' + i + 'x' + j)!==null)
+          if(state.myBoard[i][j]=='M')
+            document.getElementById('my' + i + 'x' + j).classList.add("missArea");
+      }
+  }
+
+    export function shotArea(row: number, col:number): void {
+    let shipRow, shipCol;
+    if(currentUpdateUI.yourPlayerIndex==1) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    if(state.myBoard[shipRow][shipCol]=='X')  //enemy is shot!!
+      document.getElementById('my' + (shipRow) + 'x' + (shipCol)).classList.add("shotArea");
+  }
 
   export function shouldShowImage(row: number, col: number): boolean {
-    move();
+    moveArea();
+    MissArea();
+    shotArea(row, col);
+    //console.log("state: ",state);
     if(currentUpdateUI.yourPlayerIndex==0) {
       if(state.myShip.row == row && state.myShip.col ==col)
         return true;
@@ -315,20 +370,12 @@ export function move():void {
     }
     return false;
   }
+  
 
-export function showText(): boolean {
-  if(currentUpdateUI.turnIndex == 0) return true;
+  export function showText(): boolean {
+    if(currentUpdateUI.turnIndex == 0) return true;
 
-  return false;
-}
-
-
-  function isPiece(row: number, col: number, turnIndex: number, pieceKind: string, whichboard: number): boolean {
-      return state.myBoard[row][col] === pieceKind || (isProposal(row, col) && currentUpdateUI.turnIndex == turnIndex);
-}
-
-  export function isPieceM(row: number, col: number, whichboard: number): boolean {
-    return isPiece(row, col, 1, 'M', whichboard);
+    return false;
   }
 
   export function shouldSlowlyAppear(row: number, col: number): boolean {

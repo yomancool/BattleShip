@@ -118,6 +118,9 @@ body {
 .missArea{
   background-color: black;
 }
+.shotArea{
+  background-color: green;
+}
 .yourhover {
   background-color: red;
   opacity: 0.5;

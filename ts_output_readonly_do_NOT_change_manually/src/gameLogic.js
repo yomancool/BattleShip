@@ -189,23 +189,28 @@ var gameLogic;
         var myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
         var yourP = { row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col };
         if (board[row][col] == '') {
+            console.log("shot miss!!");
             board[row][col] = 'M';
-            document.getElementById('my' + (row) + 'x' + (col)).classList.add("missArea");
         }
         else {
+            console.log("shot hit!!");
             if (turnIndexBeforeMove == 0) {
                 originRow = stateBeforeMove.myShip.row;
                 originCol = stateBeforeMove.myShip.col;
                 if (row != originRow && col != originCol)
-                    if (board[row][col] == 'O')
-                        board[row][col] == 'X';
+                    if (board[row][col] == 'O') {
+                        console.log("O -> X");
+                        board[row][col] = 'X';
+                    }
             }
             else {
                 originRow = stateBeforeMove.yourShip.row;
                 originCol = stateBeforeMove.yourShip.col;
                 if (row != originRow && col != originCol)
-                    if (board[row][col] == 'O')
-                        board[row][col] == 'X';
+                    if (board[row][col] == 'O') {
+                        console.log("O -> X");
+                        board[row][col] = 'X';
+                    }
                 myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
                 yourP = { row: originRow, col: originCol };
             }
@@ -233,6 +238,7 @@ var gameLogic;
             stateAfterMove = shotState(stateBeforeMove, turnIndexBeforeMove, row, col);
             turnIndex = 1 - turnIndexBeforeMove;
             endMatchScores = null;
+            console.log("state after shot:", stateAfterMove);
         }
         var myBoardAfterMove = stateAfterMove.myBoard;
         var winner = getWinner(myBoardAfterMove, stateAfterMove);
