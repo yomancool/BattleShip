@@ -54,7 +54,8 @@
         style="position:absolute; top:0; left:{{col * 10}}%; width:10%; height:100%;"
         ng-class="{myhover:hover, r: col < 10, b: row < 10, t: row < 1, l: col < 1,
         moveArea:game.moveArea(row,col),
-        missArea:game.missArea(row,col)}"
+        missArea:game.missArea(row,col),
+        shotArea:game.shotArea(row,col)}"
         ng-mouseenter="hover=true"
         ng-mouseleave="hover=false"
         ng-click="game.cellClickedMy(row, col)"
