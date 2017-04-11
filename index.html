@@ -46,13 +46,15 @@
 <div id="move" style="display:none">invalid move!</div>
 <div id="gameArea">
   <img class="background" src="css/ocean_b3.gif">
-  <div id="shadow"> </div>
+  <div id="shadow" class="shadow"> </div>
 
   <div id="myBoard" ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
       style="position:absolute; top:{{row * 10}}%; width:100%; height:10%;">
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
         style="position:absolute; top:0; left:{{col * 10}}%; width:10%; height:100%;"
-        ng-class="{myhover:hover, r: col < 10, b: row < 10, t: row < 1, l: col < 1}"
+        ng-class="{myhover:hover, r: col < 10, b: row < 10, t: row < 1, l: col < 1,
+        moveArea:game.moveArea(row,col),
+        missArea:game.missArea(row,col)}"
         ng-mouseenter="hover=true"
         ng-mouseleave="hover=false"
         ng-click="game.cellClickedMy(row, col)"

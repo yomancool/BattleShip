@@ -112,8 +112,12 @@ var game;
         clearAnimationTimeout();
         game.state = params.state;
         if (isFirstMove()) {
-            log.info("initial move!!!!!!!!!");
             game.state = gameLogic.getInitialState();
+            console.log("initial move!!!!!!!!!: ", game.state);
+            console.log("your row!!!!!!!!!: ", game.state.yourShip.row);
+            console.log("your col!!!!!!!!!: ", game.state.yourShip.col);
+            params.state = game.state;
+            updateUI(params);
         }
         // We calculate the AI move only after the animation finishes,
         // because if we call aiService now
@@ -148,6 +152,9 @@ var game;
             return;
         }
         game.didMakeMove = true;
+        //init move shot for next player
+        game.state.move = false;
+        game.state.shot = false;
         if (!game.proposals) {
             gameService.makeMove(move, null);
         }
@@ -165,7 +172,7 @@ var game;
         }
     }
     function isFirstMove() {
-        return !game.currentUpdateUI.state;
+        return !game.state;
     }
     function yourPlayerIndex() {
         return game.currentUpdateUI.yourPlayerIndex;
@@ -242,6 +249,8 @@ var game;
     game.valid = valid;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
+        console.log("your row!!!!!!!!!: ", game.state.yourShip.row);
+        console.log("your col!!!!!!!!!: ", game.state.yourShip.col);
         if (!valid(row, col)) {
             document.getElementById("move").style.display = "block";
             return;
@@ -269,46 +278,34 @@ var game;
             makeMove(nextMove);
     }
     game.cellClickedMy = cellClickedMy;
-    function moveArea() {
+    function moveArea(row, col) {
         var myRow = game.state.myShip.row;
         var myCol = game.state.myShip.col;
         var yourRow = game.state.yourShip.row;
         var yourCol = game.state.yourShip.col;
-        for (var i = 0; i < 10; i++)
-            for (var j = 0; j < 10; j++) {
-                if (document.getElementById('my' + i + 'x' + j) !== null)
-                    if (document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
-                        document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
-            }
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
-            for (var i = -1; i <= 1; i++) {
-                for (var j = -1; j <= 1; j++) {
+            for (var i = -1; i <= 1; i++)
+                for (var j = -1; j <= 1; j++)
                     if (i != 0 || j != 0)
-                        if ((myRow + i) >= 0 && (myRow + i) < 10 && (myCol + j) >= 0 && (myCol + j) < 10)
-                            if (document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)) !== null)
-                                document.getElementById('my' + (myRow + i) + 'x' + (myCol + j)).classList.add("moveArea");
-                }
-            }
+                        if ((myRow + i) == row && (myCol + j) == col)
+                            return true;
         }
         else {
             for (var i = -1; i <= 1; i++)
                 for (var j = -1; j <= 1; j++)
                     if (i != 0 || j != 0)
-                        if ((yourRow + i) >= 0 && (yourRow + i) < 10 && (yourCol + j) >= 0 && (yourCol + j) < 10)
-                            if (document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)) !== null)
-                                document.getElementById('my' + (yourRow + i) + 'x' + (yourCol + j)).classList.add("moveArea");
+                        if ((yourRow + i) == row && (yourCol + j) == col)
+                            return true;
         }
+        return false;
     }
     game.moveArea = moveArea;
-    function MissArea() {
-        for (var i = 0; i < 10; i++)
-            for (var j = 0; j < 10; j++) {
-                if (document.getElementById('my' + i + 'x' + j) !== null)
-                    if (game.state.myBoard[i][j] == 'M')
-                        document.getElementById('my' + i + 'x' + j).classList.add("missArea");
-            }
+    function missArea(row, col) {
+        if (game.state.myBoard[row][col] == 'M')
+            return true;
+        return false;
     }
-    game.MissArea = MissArea;
+    game.missArea = missArea;
     function shotArea(row, col) {
         var shipRow, shipCol;
         if (game.currentUpdateUI.yourPlayerIndex == 1) {
@@ -320,12 +317,13 @@ var game;
             shipCol = game.state.yourShip.col;
         }
         if (game.state.myBoard[shipRow][shipCol] == 'X')
-            document.getElementById('my' + (shipRow) + 'x' + (shipCol)).classList.add("shotArea");
+            return true;
+        return false;
     }
     game.shotArea = shotArea;
     function shouldShowImage(row, col) {
-        moveArea();
-        MissArea();
+        moveArea(row, col);
+        missArea(row, col);
         shotArea(row, col);
         //console.log("state: ",state);
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
