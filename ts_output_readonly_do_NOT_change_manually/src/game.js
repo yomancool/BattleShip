@@ -316,7 +316,7 @@ var game;
             shipRow = game.state.yourShip.row;
             shipCol = game.state.yourShip.col;
         }
-        if (game.state.myBoard[shipRow][shipCol] == 'X')
+        if (row == shipRow && col == shipCol && game.state.myBoard[shipRow][shipCol] == 'X')
             return true;
         return false;
     }

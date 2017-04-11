@@ -343,8 +343,9 @@ export function moveArea(row:number,col:number):boolean {
       shipRow = state.yourShip.row;
       shipCol = state.yourShip.col;
     }
-    if(state.myBoard[shipRow][shipCol]=='X')  //enemy is shot!!
+    if(row == shipRow && col == shipCol && state.myBoard[shipRow][shipCol]=='X')  //enemy is shot!!
       return true;
+    
     return false;
   }
 
