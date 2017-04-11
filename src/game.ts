@@ -122,8 +122,12 @@ module game {
     clearAnimationTimeout();
     state = params.state;
     if (isFirstMove()) {
-      log.info("initial move!!!!!!!!!");
       state = gameLogic.getInitialState();
+      console.log("initial move!!!!!!!!!: ", state);
+      console.log("your row!!!!!!!!!: ", state.yourShip.row);
+      console.log("your col!!!!!!!!!: ", state.yourShip.col);
+      params.state = state;
+      updateUI(params);
     }
     // We calculate the AI move only after the animation finishes,
     // because if we call aiService now
@@ -160,7 +164,9 @@ module game {
       return;
     }
     didMakeMove = true;
-
+    //init move shot for next player
+    state.move = false;
+    state.shot = false;
     if (!proposals) {
       gameService.makeMove(move,null);
     } else {
@@ -179,7 +185,7 @@ module game {
   }
 
   function isFirstMove() {
-    return !currentUpdateUI.state;
+    return !state;
   }
 
   function yourPlayerIndex() {
@@ -268,7 +274,8 @@ module game {
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
-    
+          console.log("your row!!!!!!!!!: ", state.yourShip.row);
+      console.log("your col!!!!!!!!!: ", state.yourShip.col);
     if (!valid(row,col)) {
       document.getElementById("move").style.display = "block"; 
       return;
@@ -298,50 +305,35 @@ module game {
 }
 
 
-export function moveArea():void {
-
+export function moveArea(row:number,col:number):boolean {
   let myRow = state.myShip.row;
   let myCol = state.myShip.col;
-
   let yourRow = state.yourShip.row;
   let yourCol = state.yourShip.col;
 
-  for(let i=0;i<10;i++)
-    for(let j=0;j<10;j++){
-      if(document.getElementById('my' + i + 'x' + j)!==null)
-        if(document.getElementById('my' + i + 'x' + j).classList.contains("moveArea"))
-          document.getElementById('my' + i + 'x' + j).classList.remove("moveArea");
-    }
-
   if(currentUpdateUI.yourPlayerIndex==0) {
-    for(let i=-1;i<=1;i++){
-      for(let j=-1;j<=1;j++){
+    for(let i=-1;i<=1;i++)
+      for(let j=-1;j<=1;j++)
         if (i!=0 || j!=0)
-          if((myRow+i) >=0 && (myRow+i) < 10 && (myCol+j) >=0 && (myCol+j) < 10) 
-            if(document.getElementById('my' + (myRow+i) + 'x' + (myCol+j))!==null)
-              document.getElementById('my' + (myRow+i) + 'x' + (myCol+j)).classList.add("moveArea");
-      }
-    } 
+          if((myRow+i) == row && (myCol+j) == col) 
+            return true;  
   }
   else {
     for(let i=-1;i<=1;i++)
       for(let j=-1;j<=1;j++)
         if (i!=0 || j!=0)
-          if((yourRow+i) >=0 && (yourRow+i) < 10 && (yourCol+j) >=0 && (yourCol+j) < 10)
-            if(document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j))!==null)
-              document.getElementById('my' + (yourRow+i) + 'x' + (yourCol+j)).classList.add("moveArea");
+          if((yourRow+i) == row && (yourCol+j) == col)
+            return true;
   }
+  return false;
 }
-  export function MissArea(): void {
-    for(let i=0;i<10;i++)
-      for(let j=0;j<10;j++){
-        if(document.getElementById('my' + i + 'x' + j)!==null)
-          if(state.myBoard[i][j]=='M')
-            document.getElementById('my' + i + 'x' + j).classList.add("missArea");
-      }
+  export function missArea(row:number,col:number): boolean {
+    if(state.myBoard[row][col]=='M')
+      return true;
+    return false;
   }
 
-    export function shotArea(row: number, col:number): void {
+  export function shotArea(row: number, col:number): boolean {
     let shipRow, shipCol;
     if(currentUpdateUI.yourPlayerIndex==1) {
       shipRow = state.myShip.row;
@@ -352,12 +344,13 @@ export function moveArea():void {
       shipCol = state.yourShip.col;
     }
     if(state.myBoard[shipRow][shipCol]=='X')  //enemy is shot!!
-      document.getElementById('my' + (shipRow) + 'x' + (shipCol)).classList.add("shotArea");
+      return true;
+    return false;
   }
 
   export function shouldShowImage(row: number, col: number): boolean {
-    moveArea();
-    MissArea();
+    moveArea(row,col);
+    missArea(row,col);
     shotArea(row, col);
     //console.log("state: ",state);
     if(currentUpdateUI.yourPlayerIndex==0) {

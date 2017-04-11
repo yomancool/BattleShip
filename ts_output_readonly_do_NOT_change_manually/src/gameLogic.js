@@ -114,7 +114,7 @@ var gameLogic;
             var your = Math.floor((Math.random() * 10));
             board[0][mine] = 'O';
             board[9][your] = 'O';
-            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: 9, col: your }, move: false, shot: false };
+            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: 9, col: your }, move: false, shot: false, buffer: null };
         }
     }
     gameLogic.getInitialState = getInitialState;
@@ -179,7 +179,7 @@ var gameLogic;
             myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
             yourP = { row: row, col: col };
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false, buffer: null };
     }
     gameLogic.moveState = moveState;
     function shotState(stateBeforeMove, turnIndexBeforeMove, row, col) {
@@ -215,7 +215,7 @@ var gameLogic;
                 yourP = { row: originRow, col: originCol };
             }
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true, buffer: { row: row, col: col } };
     }
     gameLogic.shotState = shotState;
     function createMove(stateBeforeMove, row, col, turnIndexBeforeMove) {
