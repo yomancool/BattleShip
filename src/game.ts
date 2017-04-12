@@ -223,10 +223,10 @@ module game {
     }
     if(shipRow==row && shipCol==col)  //shot myself
       return false;
-    
+
     if(state.myBoard[row][col]=='M')  //already shot
       return false;
-    
+
     return true;
   }
 
@@ -236,7 +236,7 @@ module game {
       console.log("invalid Move!");
       return false;
     }
-    
+
     let shipRow, shipCol;
     if(currentUpdateUI.yourPlayerIndex==0) {
       shipRow = state.myShip.row;
@@ -261,7 +261,7 @@ module game {
   export function valid(row: number, col: number): boolean {
     let shipRow, shipCol;
     console.log("judging valid state: ", state);
-    
+
     if(state.move==false && state.shot==false) {
       console.log("move!!!");
       return validMove(row,col);
@@ -278,13 +278,13 @@ module game {
           console.log("your row!!!!!!!!!: ", state.yourShip.row);
       console.log("your col!!!!!!!!!: ", state.yourShip.col);
     if (!valid(row,col)) {
-      document.getElementById("move").style.display = "block"; 
+      document.getElementById("move").style.display = "block";
       return;
     }
 
     if (!isHumanTurn()) return;
     document.getElementById("move").style.display = "none";
-    
+
     let nextMove: IMove = null;
     try {
       nextMove = gameLogic.createMove(
@@ -306,6 +306,13 @@ module game {
 }
 
 
+export function cursor():boolean{
+  if(state.move == true)
+    return true;
+  else
+    return false;
+}
+
 export function moveArea(row:number,col:number):boolean {
   let myRow = state.myShip.row;
   let myCol = state.myShip.col;
@@ -316,8 +323,8 @@ export function moveArea(row:number,col:number):boolean {
     for(let i=-1;i<=1;i++)
       for(let j=-1;j<=1;j++)
         if (i!=0 || j!=0)
-          if((myRow+i) == row && (myCol+j) == col) 
-            return true;  
+          if((myRow+i) == row && (myCol+j) == col)
+            return true;
   }
   else {
     for(let i=-1;i<=1;i++)
@@ -346,7 +353,7 @@ export function moveArea(row:number,col:number):boolean {
     }
     if(row == shipRow && col == shipCol && state.myBoard[shipRow][shipCol]=='X')  //enemy is shot!!
       return true;
-    
+
     return false;
   }
 
@@ -382,7 +389,7 @@ export function moveArea(row:number,col:number):boolean {
     }
     return false;
   }
-  
+
 
   export function showText(): boolean {
     if(currentUpdateUI.turnIndex == 0) return true;
