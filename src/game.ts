@@ -121,11 +121,10 @@ module game {
     currentUpdateUI = params;
     clearAnimationTimeout();
     state = params.state;
+
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       console.log("initial move!!!!!!!!!: ", state);
-      console.log("your row!!!!!!!!!: ", state.yourShip.row);
-      console.log("your col!!!!!!!!!: ", state.yourShip.col);
       params.state = state;
       updateUI(params);
     }
@@ -223,6 +222,9 @@ module game {
       shipCol = state.yourShip.col;
     }
     if(shipRow==row && shipCol==col)  //shot myself
+      return false;
+
+    if(state.myBoard[row][col]=='M')  //already shot
       return false;
 
     return true;
@@ -356,10 +358,28 @@ export function moveArea(row:number,col:number):boolean {
     return false;
   }
 
+  export function distance(row:number, col:number): number {
+    let shipRow, shipCol;
+    if(currentUpdateUI.turnIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+      //console.log("row: ",row, "col: ",col, " distance: ", Math.sqrt(Math.pow(Math.abs(shipRow-row),2) + Math.pow(Math.abs(shipCol-col),2)));
+      return Math.sqrt(Math.pow(Math.abs(shipRow-row),2) + Math.pow(Math.abs(shipCol-col),2));
+  }
+
+  export function previousShot(row:number, col:number): boolean {
+    console.log("buffer: ",state.buffer.row, state.buffer.col);
+    if(state.buffer.row == row && state.buffer.col == col)
+      return true;
+    return false;
+  }
+
   export function shouldShowImage(row: number, col: number): boolean {
-    moveArea(row,col);
-    missArea(row,col);
-    shotArea(row, col);
     //console.log("state: ",state);
     if(currentUpdateUI.yourPlayerIndex==0) {
       if(state.myShip.row == row && state.myShip.col ==col)

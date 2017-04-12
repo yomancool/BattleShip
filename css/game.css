@@ -28,7 +28,8 @@ textarea, input {
   display: none !important;
 }
 body {
-  background-color: #1E90FF;
+  /* background-color: #1E90FF; */
+  
 }
 
 .background{
@@ -122,9 +123,41 @@ body {
 {
   opacity:1;
 }
+
+.missAreaNear{
+  background-color: black;
+  animation:missAreaNear 3s ease-in-out;
+}
+@keyframes missAreaNear {
+  0% {background-color: red;}
+  80% {background-color: darkred;}
+  100% {background-color: black;}
+}
+
+.missAreaMiddle{
+  background-color: black;
+  animation:missAreaMiddle 3s ease-in-out;
+}
+@keyframes missAreaMiddle {
+  0% {background-color: orange;}
+  80% {background-color: darkorange;}
+  100% {background-color: black;}
+}
+
+.missAreaFar{
+  background-color: black;
+  animation:missAreaFar 3s ease-in-out;
+}
+@keyframes missAreaFar {
+  0% {background-color: blue;}
+  80% {background-color: darkblue;}
+  100% {background-color: black;}
+}
+
 .missArea{
   background-color: black;
 }
+
 .shotArea{
   background-color: green;
 }
