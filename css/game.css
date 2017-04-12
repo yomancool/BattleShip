@@ -53,7 +53,7 @@ body {
 }
 
 /*show cover*/
-.shadow {
+#shadow {
   position:fixed;
   top:0;
   left:0;
@@ -106,6 +106,13 @@ body {
   opacity: 0.5;
 }
 
+.cursor{
+  cursor:url("https://cdn2.iconfinder.com/data/icons/selection-cursors-2/24/cursor-target-2-64.png") 20 25, auto;
+  width: 50%;
+  height:50%;
+}
+
+
 .moveArea{
   background-color: red;
   opacity: 0.5;
@@ -126,9 +133,9 @@ body {
   opacity: 0.5;
 }
 
+=======
+>>>>>>> yoav-zibin/gh-pages
 .slowlyAppear {
-  -webkit-animation-delay: 1s; /* Safari 4.0 - 8.0 */
-  animation-delay: 1s;
   animation: slowlyAppear 0.5s linear;
 }
 
@@ -136,5 +143,3 @@ body {
   from {opacity: 0.1;}
   to {opacity: 1;}
 }
-
-

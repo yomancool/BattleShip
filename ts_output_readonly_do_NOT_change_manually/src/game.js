@@ -169,6 +169,7 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
+            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
@@ -278,6 +279,13 @@ var game;
             makeMove(nextMove);
     }
     game.cellClickedMy = cellClickedMy;
+    function cursor() {
+        if (game.state.move == true)
+            return true;
+        else
+            return false;
+    }
+    game.cursor = cursor;
     function moveArea(row, col) {
         var myRow = game.state.myShip.row;
         var myCol = game.state.myShip.col;
