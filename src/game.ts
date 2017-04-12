@@ -228,7 +228,6 @@ module game {
       return false;
     
     return true;
-
   }
 
   export function validMove(row:number, col:number): boolean {
@@ -366,8 +365,7 @@ export function moveArea(row:number,col:number):boolean {
   }
 
   export function previousShot(row:number, col:number): boolean {
-    console.log("buffer: ",state.buffer.row, state.buffer.col);
-    if(state.buffer.row == row && state.buffer.col == col)
+    if(state.buffer!=null && state.buffer.row == row && state.buffer.col == col)
       return true;
     return false;
   }
