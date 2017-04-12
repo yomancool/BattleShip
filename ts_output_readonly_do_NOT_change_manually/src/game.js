@@ -167,7 +167,6 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
-            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
@@ -344,8 +343,7 @@ var game;
     }
     game.distance = distance;
     function previousShot(row, col) {
-        console.log("buffer: ", game.state.buffer.row, game.state.buffer.col);
-        if (game.state.buffer.row == row && game.state.buffer.col == col)
+        if (game.state.buffer != null && game.state.buffer.row == row && game.state.buffer.col == col)
             return true;
         return false;
     }
