@@ -114,8 +114,6 @@ var game;
         if (isFirstMove()) {
             game.state = gameLogic.getInitialState();
             console.log("initial move!!!!!!!!!: ", game.state);
-            console.log("your row!!!!!!!!!: ", game.state.yourShip.row);
-            console.log("your col!!!!!!!!!: ", game.state.yourShip.col);
             params.state = game.state;
             updateUI(params);
         }
@@ -205,6 +203,8 @@ var game;
             shipCol = game.state.yourShip.col;
         }
         if (shipRow == row && shipCol == col)
+            return false;
+        if (game.state.myBoard[row][col] == 'M')
             return false;
         return true;
     }
@@ -321,10 +321,28 @@ var game;
         return false;
     }
     game.shotArea = shotArea;
+    function distance(row, col) {
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.turnIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        //console.log("row: ",row, "col: ",col, " distance: ", Math.sqrt(Math.pow(Math.abs(shipRow-row),2) + Math.pow(Math.abs(shipCol-col),2)));
+        return Math.sqrt(Math.pow(Math.abs(shipRow - row), 2) + Math.pow(Math.abs(shipCol - col), 2));
+    }
+    game.distance = distance;
+    function previousShot(row, col) {
+        console.log("buffer: ", game.state.buffer.row, game.state.buffer.col);
+        if (game.state.buffer.row == row && game.state.buffer.col == col)
+            return true;
+        return false;
+    }
+    game.previousShot = previousShot;
     function shouldShowImage(row, col) {
-        moveArea(row, col);
-        missArea(row, col);
-        shotArea(row, col);
         //console.log("state: ",state);
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             if (game.state.myShip.row == row && game.state.myShip.col == col)
