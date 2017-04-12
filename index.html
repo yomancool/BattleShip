@@ -29,14 +29,14 @@
 <!-- <button ng-click="game.flipDirection()">change direction</button> -->
 <!-- <button ng-click="game.useRadar()">Use radar!</button> -->
 
-<div ng-if="!game.firstMove()" id="status">	        
-      <div ng-if="game.isMyTurn() && !game.isGameOver()"> 
+<div ng-if="!game.firstMove()" id="status">
+      <div ng-if="game.isMyTurn() && !game.isGameOver()">
         <text>Your turn</text>
       </div>
-      <div ng-if="!game.isMyTurn() && !game.isGameOver()"> 
+      <div ng-if="!game.isMyTurn() && !game.isGameOver()">
         <text>Opponent turn.</text>
       </div>
-      <div ng-if="game.isGameOver()"> 
+      <div ng-if="game.isGameOver()">
         <text><br/></text>
       </div>
     </div>
@@ -65,6 +65,7 @@
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"
         style="position:absolute; top:0; left:{{col * 10}}%; width:10%; height:100%;"
         ng-class="{myhover:hover && !game.missArea(row,col), r: col < 10, b: row < 10, t: row < 1, l: col < 1,
+        cursor:game.cursor(),
         moveArea:game.moveArea(row,col),
         missAreaFar:game.missArea(row,col) && game.distance(row,col) > 8 && game.previousShot(row,col),
         missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 8 && game.distance(row,col) > 3 && game.previousShot(row,col),
