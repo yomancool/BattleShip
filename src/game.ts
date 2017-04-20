@@ -357,6 +357,23 @@ export function moveArea(row:number,col:number):boolean {
     return false;
   }
 
+  export function shootingArea(row: number, col:number): boolean {
+    let shipRow, shipCol;
+    if(currentUpdateUI.yourPlayerIndex==1) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    if(row != shipRow && col != shipCol && state.myBoard[row][col]=='X')  //enemy is shot!!
+      return true;
+
+    return false;
+  }
+
+
   export function distance(row:number, col:number): number {
     let shipRow, shipCol;
     if(currentUpdateUI.turnIndex==0) {

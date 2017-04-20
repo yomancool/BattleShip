@@ -328,6 +328,21 @@ var game;
         return false;
     }
     game.shotArea = shotArea;
+    function shootingArea(row, col) {
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.yourPlayerIndex == 1) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        if (row != shipRow && col != shipCol && game.state.myBoard[row][col] == 'X')
+            return true;
+        return false;
+    }
+    game.shootingArea = shootingArea;
     function distance(row, col) {
         var shipRow, shipCol;
         if (game.currentUpdateUI.turnIndex == 0) {
