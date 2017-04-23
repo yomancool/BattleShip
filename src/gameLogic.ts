@@ -25,103 +25,8 @@ import log = gamingPlatform.log;
 import dragAndDropService = gamingPlatform.dragAndDropService;
 
 module gameLogic {
-  export const ROWS = 10;
-  export const COLS = 10;
-
-
-/*
-  function setShipRow(board: Board, state: IState, row: number, col: number, direction: boolean): IState {
-    let shipNum = state.ship;
-    let originBoard = board;
-    if(shipNum < 5) {
-      if(state.start==0) {
-        if(board[row][col] === 'O') {
-          throw new Error("already set!");
-        }
-        else {
-          let length=5-shipNum;
-          let compensate=0;
-
-         // give compensate to out of boundary
-          if(!validSet(board, row, col, length, direction)) {
-            compensate = row+length-ROWS;
-          }
-
-          //check if already set
-          for(let i=0; i<length; i++) {
-            //check if already set
-            if(board[row-compensate+i][col]==='O') {
-              window.alert("Already set ship here");
-              return {myBoard: originBoard ,yourBoard: state.yourBoard, delta:null, ship: shipNum, start: state.start};
-            }
-          }
-
-          for(let i=0; i<length; i++) {
-            board[row-compensate+i][col]='O';
-          }
-          
-          shipNum++;
-          console.log("shipNum:", shipNum);
-        }
-      }
-    }
-    else {
-      return {myBoard: board,yourBoard: state.yourBoard, delta:{row,col}, ship: shipNum, start: 1};
-    }
-    if(shipNum==5) {
-      state.start=1;
-    }
-
-    return {myBoard: board,yourBoard: state.yourBoard, delta:{row,col}, ship: shipNum, start: state.start};
-  }
-*/
-/*
-  function setShipCol(board: Board, state: IState, row: number, col: number, direction: boolean): IState {
-    let shipNum = state.ship;
-    let originBoard = board;
-    if(shipNum < 5) {
-      if(state.start==0) {
-        if(board[row][col] === 'O') {
-          throw new Error("already set!");
-        }
-        else {
-          let length=5-shipNum;
-          let compensate=0;
-
-          //give compensate to out of boundary
-          if(!validSet(board, row, col, length,direction)) {
-            compensate = col+length-COLS;
-          }
-
-          //check if already set
-          for(let i=0; i<length; i++) {
-            //check if already set
-            if(board[row][col-compensate+i]==='O') {
-              window.alert("Already set ship here");
-              return {myBoard: originBoard ,yourBoard: state.yourBoard, delta:null, ship: shipNum, start: state.start};
-            }
-          }
-
-          for(let i=0; i<length; i++) {
-            board[row][col-compensate+i]='O';
-          }
-
-          shipNum++;
-          console.log("shipNum:", shipNum);
-        }
-      }
-    }
-    else {
-      return {myBoard: board,yourBoard: state.yourBoard, delta:{row,col}, ship: shipNum, start: 1};
-    }
-    if(shipNum==5) {
-      state.start=1;
-    }
-
-    return {myBoard: board,yourBoard: state.yourBoard, delta:{row,col}, ship: shipNum, start: state.start};
-  }
-*/
-
+  export const ROWS = 8;
+  export const COLS = 8;
 
   export function getInitialState(): IState {
     if(1) {
@@ -133,31 +38,16 @@ module gameLogic {
         }
       }
       // random starting point
-      let mine = Math.floor((Math.random() * 10));
-      let your = Math.floor((Math.random() * 10));
+      let mine = Math.floor((Math.random() * ROWS));
+      let your = Math.floor((Math.random() * COLS));
 
       board[0][mine] = 'O';
-      board[9][your] = 'O';
+      board[ROWS-1][your] = 'O';
       
-      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:9,col:your}, move:false, shot:false, buffer:null};
+      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:ROWS-1,col:your}, move:false, shot:false, buffer:null};
     }  
 }
-/*
-  export function validSet(board: Board, row: number, col: number, leng: number, direction: boolean): boolean {
-    if(direction == true) {
-      if((row + leng) > 10 || row < 0 || col < 0) {
-        return false;
-      }
-    }
-    else {
-      if((col + leng) > 10 || row < 0 || col < 0) {
-        return false;
-      }
-    }
 
-    return true;
-  }
-*/
 
   export function validMove(row: number, col: number): boolean {
     if(game.currentUpdateUI.yourPlayerIndex==0) {

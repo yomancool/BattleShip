@@ -54,6 +54,7 @@ body {
 }
 
 /*show cover*/
+/*
 #shadow {
   position:fixed;
   top:0;
@@ -69,8 +70,10 @@ body {
   80% {z-index:5; background: rgba(0,0,0,0.8);}
   100% {z-index:0; background: rgba(0,0,0,0);}
 }
+*/
 /* ********* */
 
+/*
 #status {
   position:relative;
   font-size: 32px;
@@ -78,7 +81,7 @@ body {
   font-family: 'Lato', sans-serif;
   opacity: 0;
   animation: status 2.8s ease-out;
-  -webkit-animation-delay: 1s; /* Safari 4.0 - 8.0 */
+  -webkit-animation-delay: 1s; 
   animation-delay: 1s;
 }
 @keyframes status {
@@ -88,7 +91,7 @@ body {
   75% {z-index:6; left:50%;top:50%; opacity:0;}
   100% {z-index:0; left:50%;top:50%; }
   }
-
+*/
 .r {
   border-right: 1pt solid white;
 }
@@ -182,3 +185,9 @@ body {
   from {opacity: 0.1;}
   to {opacity: 1;}
 }
+
+.menudemoBasicUsage .md-menu-demo {
+  padding: 24px; }
+
+.menudemoBasicUsage .menu-demo-container {
+  min-height: 200px; }

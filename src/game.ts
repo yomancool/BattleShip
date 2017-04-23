@@ -319,6 +319,10 @@ export function moveArea(row:number,col:number):boolean {
   let yourRow = state.yourShip.row;
   let yourCol = state.yourShip.col;
 
+  if(state.move==true || state.myBoard[row][col]=='M') {
+    return false;
+  }
+
   if(currentUpdateUI.yourPlayerIndex==0) {
     for(let i=-1;i<=1;i++)
       for(let j=-1;j<=1;j++)
@@ -359,7 +363,7 @@ export function moveArea(row:number,col:number):boolean {
 
   export function shootingArea(row: number, col:number): boolean {
     let shipRow, shipCol;
-    if(currentUpdateUI.yourPlayerIndex==1) {
+    if(currentUpdateUI.yourPlayerIndex==0) {
       shipRow = state.myShip.row;
       shipCol = state.myShip.col;
     }
@@ -367,10 +371,11 @@ export function moveArea(row:number,col:number):boolean {
       shipRow = state.yourShip.row;
       shipCol = state.yourShip.col;
     }
-    if(row != shipRow && col != shipCol && state.myBoard[row][col]=='X')  //enemy is shot!!
-      return true;
 
-    return false;
+    if(state.move == false || (row == shipRow && col == shipCol) || state.myBoard[row][col]=='M')  //enemy is shot!!
+      return false;
+
+    return true;
   }
 
 
@@ -418,6 +423,8 @@ export function moveArea(row:number,col:number):boolean {
       return state.delta &&
           state.delta.row === row && state.delta.col === col;
   }
+
+  
 
 }
 
