@@ -25,10 +25,13 @@
 </head>
 
 <body ng-cloak>
+<!-- weapon area -->
+<button ng-click="game.turnMissle()">use Missle</button>
+<div ng-if="game.crossMissle==true"> using missle </div>
+<button ng-click="game.turnRadar()">use Radar</button>
+<div ng-if="game.radar==true"> using Radar </div>
 
-<!-- <button ng-click="game.flipDirection()">change direction</button> -->
-<!-- <button ng-click="game.useRadar()">Use radar!</button> -->
-
+<!-- status area -->
 <div ng-if="!game.firstMove()" id="status">
       <div ng-if="game.isMyTurn() && !game.isGameOver()">
         <text>Your turn</text>
@@ -41,10 +44,9 @@
       </div>
     </div>
 </div>
-
-
 <div id="move" style="display:none">invalid move!</div>
 
+<!-- game area -->
 <div id="gameArea">
   <img class="background" src="css/ocean_b3.gif">
 <!--  <div id="shadow" class="shadow"> </div> -->

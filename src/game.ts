@@ -8,16 +8,11 @@ interface SupportedLanguages {
 
 module game {
 
-  export let direction: boolean = true;
-  export function flipDirection() { direction = !direction; }
-
-  export let space: boolean = true;
-
-  export let radar: boolean = true;
-  export function useRadar() {
-    //check status before switching radar
-    radar = !radar;
-  }
+  export let crossMissle: boolean = false;
+  export function turnMissle() { crossMissle = !crossMissle;}
+  
+  export let radar: boolean = false;
+  export function turnRadar() {radar = !radar;}
 
   export let $rootScope: angular.IScope = null;
   export let $timeout: angular.ITimeoutService = null;

@@ -1,16 +1,12 @@
 ;
 var game;
 (function (game) {
-    game.direction = true;
-    function flipDirection() { game.direction = !game.direction; }
-    game.flipDirection = flipDirection;
-    game.space = true;
-    game.radar = true;
-    function useRadar() {
-        //check status before switching radar
-        game.radar = !game.radar;
-    }
-    game.useRadar = useRadar;
+    game.crossMissle = false;
+    function turnMissle() { game.crossMissle = !game.crossMissle; }
+    game.turnMissle = turnMissle;
+    game.radar = false;
+    function turnRadar() { game.radar = !game.radar; }
+    game.turnRadar = turnRadar;
     game.$rootScope = null;
     game.$timeout = null;
     // Global variables are cleared when getting updateUI.
