@@ -52,9 +52,9 @@
 <!--  <div id="shadow" class="shadow"> </div> -->
 
   <div id="myBoard" ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]"
-      style="position:absolute; top:{{row * 10}}%; width:100%; height:10%;">
+      style="position:absolute; top:{{row * 12.5}}%; width:100%; height:12.5%;">
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7]"
-        style="position:absolute; top:0; left:{{col * 10}}%; width:10%; height:100%;"
+        style="position:absolute; top:0; left:{{col * 12.5}}%; width:12.5%; height:100%;"
         ng-class="{myhover:hover && !game.missArea(row,col), r: col < 10, b: row < 10, t: row < 1, l: col < 1,
         cursor:game.cursor(),
         moveArea:game.moveArea(row,col),
@@ -71,8 +71,8 @@
       <div style="width:100%; height: 100%"
           ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}"
           ng-if="game.shouldShowImage(row, col)">
-          <img src="css/ship_t.gif" width="125%" height="125%" position='absolute' margin='auto'>
-          <class="ship" img src="css/ship_t.gif" width="125%" height="125%" position='absolute' margin='auto'>
+          <img src="css/ship.gif" width="100%" height="100%" position='absolute' margin='auto'>
+          <class="ship" img src="css/ship.gif" width=100% height=100% position='absolute' margin='auto'>
       </div>
     </div>
   </div>
