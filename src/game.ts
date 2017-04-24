@@ -8,16 +8,11 @@ interface SupportedLanguages {
 
 module game {
 
-  export let direction: boolean = true;
-  export function flipDirection() { direction = !direction; }
-
-  export let space: boolean = true;
-
-  export let radar: boolean = true;
-  export function useRadar() {
-    //check status before switching radar
-    radar = !radar;
-  }
+  export let crossMissle: boolean = false;
+  export function turnMissle() { crossMissle = !crossMissle;}
+  
+  export let radar: boolean = false;
+  export function turnRadar() {radar = !radar;}
 
   export let $rootScope: angular.IScope = null;
   export let $timeout: angular.ITimeoutService = null;
@@ -228,7 +223,6 @@ module game {
       return false;
 
     return true;
-
   }
 
   export function validMove(row:number, col:number): boolean {
@@ -320,6 +314,10 @@ export function moveArea(row:number,col:number):boolean {
   let yourRow = state.yourShip.row;
   let yourCol = state.yourShip.col;
 
+  if(state.move==true || state.myBoard[row][col]=='M') {
+    return false;
+  }
+
   if(currentUpdateUI.yourPlayerIndex==0) {
     for(let i=-1;i<=1;i++)
       for(let j=-1;j<=1;j++)
@@ -358,6 +356,24 @@ export function moveArea(row:number,col:number):boolean {
     return false;
   }
 
+  export function shootingArea(row: number, col:number): boolean {
+    let shipRow, shipCol;
+    if(currentUpdateUI.yourPlayerIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+
+    if(state.move == false || (row == shipRow && col == shipCol) || state.myBoard[row][col]=='M')  //enemy is shot!!
+      return false;
+
+    return true;
+  }
+
+
   export function distance(row:number, col:number): number {
     let shipRow, shipCol;
     if(currentUpdateUI.turnIndex==0) {
@@ -373,8 +389,7 @@ export function moveArea(row:number,col:number):boolean {
   }
 
   export function previousShot(row:number, col:number): boolean {
-    console.log("buffer: ",state.buffer.row, state.buffer.col);
-    if(state.buffer.row == row && state.buffer.col == col)
+    if(state.buffer!=null && state.buffer.row == row && state.buffer.col == col)
       return true;
     return false;
   }
@@ -403,6 +418,8 @@ export function moveArea(row:number,col:number):boolean {
       return state.delta &&
           state.delta.row === row && state.delta.col === col;
   }
+
+  
 
 }
 
