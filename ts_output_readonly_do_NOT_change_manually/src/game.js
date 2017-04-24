@@ -1,16 +1,12 @@
 ;
 var game;
 (function (game) {
-    game.direction = true;
-    function flipDirection() { game.direction = !game.direction; }
-    game.flipDirection = flipDirection;
-    game.space = true;
-    game.radar = true;
-    function useRadar() {
-        //check status before switching radar
-        game.radar = !game.radar;
-    }
-    game.useRadar = useRadar;
+    game.crossMissle = false;
+    function turnMissle() { game.crossMissle = !game.crossMissle; }
+    game.turnMissle = turnMissle;
+    game.radar = false;
+    function turnRadar() { game.radar = !game.radar; }
+    game.turnRadar = turnRadar;
     game.$rootScope = null;
     game.$timeout = null;
     // Global variables are cleared when getting updateUI.
@@ -290,6 +286,9 @@ var game;
         var myCol = game.state.myShip.col;
         var yourRow = game.state.yourShip.row;
         var yourCol = game.state.yourShip.col;
+        if (game.state.move == true || game.state.myBoard[row][col] == 'M') {
+            return false;
+        }
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             for (var i = -1; i <= 1; i++)
                 for (var j = -1; j <= 1; j++)
@@ -328,6 +327,21 @@ var game;
         return false;
     }
     game.shotArea = shotArea;
+    function shootingArea(row, col) {
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.yourPlayerIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        if (game.state.move == false || (row == shipRow && col == shipCol) || game.state.myBoard[row][col] == 'M')
+            return false;
+        return true;
+    }
+    game.shootingArea = shootingArea;
     function distance(row, col) {
         var shipRow, shipCol;
         if (game.currentUpdateUI.turnIndex == 0) {
