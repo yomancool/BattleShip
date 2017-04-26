@@ -58,9 +58,9 @@
         ng-class="{myhover:hover && !game.missArea(row,col), r: col < 10, b: row < 10, t: row < 1, l: col < 1,
         cursor:game.cursor(),
         moveArea:game.moveArea(row,col),
-        missAreaFar:game.missArea(row,col) && game.distance(row,col) > 8 && game.previousShot(row,col),
-        missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 8 && game.distance(row,col) > 3 && game.previousShot(row,col),
-        missAreaNear:game.missArea(row,col) && game.distance(row,col) < 3 && game.previousShot(row,col),
+        missAreaFar:game.missArea(row,col) && game.distance(row,col) >= 6 && game.previousShot(row,col),
+        missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 6 && game.distance(row,col) >= 2 && game.previousShot(row,col),
+        missAreaNear:game.missArea(row,col) && game.distance(row,col) < 2 && game.previousShot(row,col),
         missArea:game.missArea(row,col),
         shotArea:game.shotArea(row,col),
         shootingArea:game.shootingArea(row,col)}"

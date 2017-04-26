@@ -8,9 +8,14 @@ interface SupportedLanguages {
 
 module game {
 
+  /**Missle */
   export let crossMissle: boolean = false;
   export function turnMissle() { crossMissle = !crossMissle;}
-  
+  export function fireMissle(row:number, col:number):void {
+    
+  }
+
+  /**Radar */
   export let radar: boolean = false;
   export function turnRadar() {radar = !radar;}
 
@@ -270,8 +275,6 @@ module game {
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
-          console.log("your row!!!!!!!!!: ", state.yourShip.row);
-      console.log("your col!!!!!!!!!: ", state.yourShip.col);
     if (!valid(row,col)) {
       document.getElementById("move").style.display = "block";
       return;

@@ -1,9 +1,14 @@
 ;
 var game;
 (function (game) {
+    /**Missle */
     game.crossMissle = false;
     function turnMissle() { game.crossMissle = !game.crossMissle; }
     game.turnMissle = turnMissle;
+    function fireMissle(row, col) {
+    }
+    game.fireMissle = fireMissle;
+    /**Radar */
     game.radar = false;
     function turnRadar() { game.radar = !game.radar; }
     game.turnRadar = turnRadar;
@@ -245,8 +250,6 @@ var game;
     game.valid = valid;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
-        console.log("your row!!!!!!!!!: ", game.state.yourShip.row);
-        console.log("your col!!!!!!!!!: ", game.state.yourShip.col);
         if (!valid(row, col)) {
             document.getElementById("move").style.display = "block";
             return;
