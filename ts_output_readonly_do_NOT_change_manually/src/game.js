@@ -1,12 +1,10 @@
 ;
 var game;
 (function (game) {
-    game.crossMissle = false;
-    function turnMissle() { game.crossMissle = !game.crossMissle; }
-    game.turnMissle = turnMissle;
-    game.radar = false;
-    function turnRadar() { game.radar = !game.radar; }
-    game.turnRadar = turnRadar;
+    //weapons: 0 -> missile, 1 -> radar
+    game.weapons = [];
+    game.weapons[0] = false;
+    game.weapons[1] = false;
     game.$rootScope = null;
     game.$timeout = null;
     // Global variables are cleared when getting updateUI.
@@ -244,10 +242,42 @@ var game;
         }
     }
     game.valid = valid;
+    //missile
+    function turnmissile() {
+        if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
+            //window.alert("already use missile!");
+            return;
+        }
+        if (game.state.move == true)
+            game.weapons[0] = !game.weapons[0];
+        else {
+            window.alert("only use missile during shooting!");
+        }
+    }
+    game.turnmissile = turnmissile;
+    function usedmissile() {
+        return game.state.missile[game.currentUpdateUI.yourPlayerIndex];
+    }
+    game.usedmissile = usedmissile;
+    /**Radar */
+    function turnRadar() {
+        if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
+            //window.alert("already use radar!");
+            return;
+        }
+        if (game.state.move == true)
+            game.weapons[1] = !game.weapons[1];
+        else {
+            window.alert("only use radar during shooting!");
+        }
+    }
+    game.turnRadar = turnRadar;
+    function usedRadar() {
+        return game.state.radar[game.currentUpdateUI.yourPlayerIndex];
+    }
+    game.usedRadar = usedRadar;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
-        console.log("your row!!!!!!!!!: ", game.state.yourShip.row);
-        console.log("your col!!!!!!!!!: ", game.state.yourShip.col);
         if (!valid(row, col)) {
             document.getElementById("move").style.display = "block";
             return;
@@ -257,7 +287,7 @@ var game;
         document.getElementById("move").style.display = "none";
         var nextMove = null;
         try {
-            nextMove = gameLogic.createMove(game.state, row, col, game.currentUpdateUI.turnIndex);
+            nextMove = gameLogic.createMove(game.state, row, col, game.currentUpdateUI.turnIndex, game.weapons);
         }
         catch (e) {
             log.info(["Cell is already full in position:", row, col]);
@@ -269,6 +299,8 @@ var game;
         game.state = nextUpdateUI.state;
         console.log("state after move: ", game.state);
         updateUI(nextUpdateUI);
+        game.weapons[0] = false;
+        game.weapons[1] = false;
         // Move is legal, make it!
         console.log("nextMove: ", nextMove);
         if (game.state.shot == true)
@@ -394,6 +426,27 @@ var game;
             game.state.delta.row === row && game.state.delta.col === col;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
+    game.mouseRow = -1;
+    game.mouseCol = -1;
+    function crossHover(row, col, mouseRow, mouseCol) {
+        if (game.weapons[0] == false)
+            return false;
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.turnIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        if (row == shipRow && col == shipCol)
+            return false;
+        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col))
+            return true;
+        return false;
+    }
+    game.crossHover = crossHover;
 })(game || (game = {}));
 angular.module('myApp', ['gameServices'])
     .run(['$rootScope', '$timeout',

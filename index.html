@@ -26,11 +26,12 @@
 
 <body ng-cloak>
 <!-- weapon area -->
-<button ng-click="game.turnMissle()">use Missle</button>
-<div ng-if="game.crossMissle==true"> using missle </div>
+<button ng-click="game.turnmissile()">use missile</button>
+<div ng-if="game.weapons[0]"> using missile </div>
+<div ng-if="game.usedmissile()"> missile used out! </div>
 <button ng-click="game.turnRadar()">use Radar</button>
-<div ng-if="game.radar==true"> using Radar </div>
-
+<div ng-if="game.weapons[1]"> using Radar </div>
+<div ng-if="game.usedRadar()"> radar used out! </div>
 <!-- status area -->
 <div ng-if="!game.firstMove()" id="status">
       <div ng-if="game.isMyTurn() && !game.isGameOver()">
@@ -55,17 +56,19 @@
       style="position:absolute; top:{{row * 12.5}}%; width:100%; height:12.5%;">
     <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7]"
         style="position:absolute; top:0; left:{{col * 12.5}}%; width:12.5%; height:100%;"
-        ng-class="{myhover:hover && !game.missArea(row,col), r: col < 10, b: row < 10, t: row < 1, l: col < 1,
+        ng-class="{myhover:hover && !game.missArea(row,col),
+        r: col < 10, b: row < 10, t: row < 1, l: col < 1,
         cursor:game.cursor(),
         moveArea:game.moveArea(row,col),
-        missAreaFar:game.missArea(row,col) && game.distance(row,col) > 8 && game.previousShot(row,col),
-        missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 8 && game.distance(row,col) > 3 && game.previousShot(row,col),
-        missAreaNear:game.missArea(row,col) && game.distance(row,col) < 3 && game.previousShot(row,col),
+        missAreaFar:game.missArea(row,col) && game.distance(row,col) >= 6 && game.previousShot(row,col),
+        missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 6 && game.distance(row,col) >= 2 && game.previousShot(row,col),
+        missAreaNear:game.missArea(row,col) && game.distance(row,col) < 2 && game.previousShot(row,col),
         missArea:game.missArea(row,col),
         shotArea:game.shotArea(row,col),
-        shootingArea:game.shootingArea(row,col)}"
-        ng-mouseenter="hover=true"
-        ng-mouseleave="hover=false"
+        shootingArea:game.shootingArea(row,col) && !game.crossHover(row, col, game.mouseRow, game.mouseCol),
+        crossHover:!game.missArea(row,col) && game.crossHover(row, col, game.mouseRow, game.mouseCol)}"
+        ng-mouseenter="hover=true; game.mouseRow=row; game.mouseCol=col"
+        ng-mouseleave="hover=false;"
         ng-click="game.cellClickedMy(row, col)"
         id="{{'my' + row + 'x' + col}}">
       <div style="width:100%; height: 100%"
