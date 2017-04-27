@@ -418,6 +418,27 @@ var game;
             game.state.delta.row === row && game.state.delta.col === col;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
+    game.mouseRow = -1;
+    game.mouseCol = -1;
+    function crossHover(row, col, mouseRow, mouseCol) {
+        if (game.weapons[0] == false)
+            return false;
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.turnIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        if (row == shipRow && col == shipCol)
+            return false;
+        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col))
+            return true;
+        return false;
+    }
+    game.crossHover = crossHover;
 })(game || (game = {}));
 angular.module('myApp', ['gameServices'])
     .run(['$rootScope', '$timeout',

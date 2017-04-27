@@ -83,13 +83,22 @@ var gameLogic;
         return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false, buffer: null, missle: missle, radar: radar };
     }
     gameLogic.moveState = moveState;
-    function crossMissle(board, row, col) {
+    function crossMissle(board, row, col, turnIndex, state) {
+        var shipRow, shipCol;
+        if (turnIndex == 0) {
+            shipRow = state.myShip.row;
+            shipCol = state.myShip.col;
+        }
+        else {
+            shipRow = state.yourShip.row;
+            shipCol = state.yourShip.col;
+        }
         for (var i = -1; i <= 1; i++) {
             for (var j = -1; j <= 1; j++) {
                 if ((0 <= row + i) && (row + i <= gameLogic.ROWS) && (0 <= col + j) && (col + j <= gameLogic.COLS)) {
                     if ((i == -1 && j == -1) || (i == -1 && j == 1) || (i == 1 && j == -1) || (i == 1 && j == 1))
                         continue;
-                    if (board[row + i][col + j] == 'O')
+                    if (board[row + i][col + j] == 'O' && (row + i != shipRow && col + j != shipCol))
                         board[row + i][col + j] = 'X';
                     else if (board[row + i][col + j] == '')
                         board[row + i][col + j] = 'M';
@@ -110,7 +119,7 @@ var gameLogic;
         var myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
         var yourP = { row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col };
         if (weapons[0] == true) {
-            board = crossMissle(board, row, col);
+            board = crossMissle(board, row, col, turnIndexBeforeMove, stateBeforeMove);
             missle[turnIndexBeforeMove] = true;
         }
         else {

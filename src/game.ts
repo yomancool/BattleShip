@@ -447,8 +447,33 @@ export function moveArea(row:number,col:number):boolean {
           state.delta.row === row && state.delta.col === col;
   }
 
-  
+  export let mouseRow:number = -1;
+  export let mouseCol:number = -1;
 
+  export function crossHover(row: number,col: number,mouseRow: number,mouseCol: number): boolean {
+    if(weapons[0]==false)
+      return false;
+
+    let shipRow, shipCol;
+    if(currentUpdateUI.turnIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    if(row == shipRow && col == shipCol)
+      return false;
+      
+    if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) )
+      return true;
+    
+    
+    
+    return false;
+  }
+  
 }
 
 angular.module('myApp', ['gameServices'])
