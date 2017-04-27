@@ -1,17 +1,10 @@
 ;
 var game;
 (function (game) {
-    /**Missle */
-    game.crossMissle = false;
-    function turnMissle() { game.crossMissle = !game.crossMissle; }
-    game.turnMissle = turnMissle;
-    function fireMissle(row, col) {
-    }
-    game.fireMissle = fireMissle;
-    /**Radar */
-    game.radar = false;
-    function turnRadar() { game.radar = !game.radar; }
-    game.turnRadar = turnRadar;
+    //weapons: 0 -> missle, 1 -> radar
+    game.weapons = [];
+    game.weapons[0] = false;
+    game.weapons[1] = false;
     game.$rootScope = null;
     game.$timeout = null;
     // Global variables are cleared when getting updateUI.
@@ -248,6 +241,40 @@ var game;
         }
     }
     game.valid = valid;
+    //missle
+    function turnMissle() {
+        if (game.state.missle[game.currentUpdateUI.yourPlayerIndex]) {
+            //window.alert("already use missle!");
+            return;
+        }
+        if (game.state.move == true)
+            game.weapons[0] = !game.weapons[0];
+        else {
+            window.alert("only use missle during shooting!");
+        }
+    }
+    game.turnMissle = turnMissle;
+    function usedMissle() {
+        return game.state.missle[game.currentUpdateUI.yourPlayerIndex];
+    }
+    game.usedMissle = usedMissle;
+    /**Radar */
+    function turnRadar() {
+        if (game.state.missle[game.currentUpdateUI.yourPlayerIndex]) {
+            //window.alert("already use radar!");
+            return;
+        }
+        if (game.state.move == true)
+            game.weapons[1] = !game.weapons[1];
+        else {
+            window.alert("only use radar during shooting!");
+        }
+    }
+    game.turnRadar = turnRadar;
+    function usedRadar() {
+        return game.state.radar[game.currentUpdateUI.yourPlayerIndex];
+    }
+    game.usedRadar = usedRadar;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
         if (!valid(row, col)) {
@@ -259,7 +286,7 @@ var game;
         document.getElementById("move").style.display = "none";
         var nextMove = null;
         try {
-            nextMove = gameLogic.createMove(game.state, row, col, game.currentUpdateUI.turnIndex);
+            nextMove = gameLogic.createMove(game.state, row, col, game.currentUpdateUI.turnIndex, game.weapons);
         }
         catch (e) {
             log.info(["Cell is already full in position:", row, col]);
@@ -271,6 +298,8 @@ var game;
         game.state = nextUpdateUI.state;
         console.log("state after move: ", game.state);
         updateUI(nextUpdateUI);
+        game.weapons[0] = false;
+        game.weapons[1] = false;
         // Move is legal, make it!
         console.log("nextMove: ", nextMove);
         if (game.state.shot == true)

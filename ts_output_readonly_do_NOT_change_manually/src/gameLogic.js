@@ -11,18 +11,25 @@ var gameLogic;
     function getInitialState() {
         if (1) {
             var board = [];
+            var missle = [];
+            var radar = [];
             for (var i = 0; i < gameLogic.ROWS; i++) {
                 board[i] = [];
                 for (var j = 0; j < gameLogic.COLS; j++) {
                     board[i][j] = '';
                 }
             }
+            //initial missle
+            missle[0] = false;
+            missle[1] = false;
+            radar[0] = false;
+            radar[1] = false;
             // random starting point
             var mine = Math.floor((Math.random() * gameLogic.ROWS));
             var your = Math.floor((Math.random() * gameLogic.COLS));
             board[0][mine] = 'O';
             board[gameLogic.ROWS - 1][your] = 'O';
-            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: gameLogic.ROWS - 1, col: your }, move: false, shot: false, buffer: null };
+            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: gameLogic.ROWS - 1, col: your }, move: false, shot: false, buffer: null, missle: missle, radar: radar };
         }
     }
     gameLogic.getInitialState = getInitialState;
@@ -55,6 +62,8 @@ var gameLogic;
         var originRow;
         var originCol;
         var board = stateBeforeMove.myBoard;
+        var missle = stateBeforeMove.missle;
+        var radar = stateBeforeMove.radar;
         if (turnIndexBeforeMove == 0) {
             originRow = stateBeforeMove.myShip.row;
             originCol = stateBeforeMove.myShip.col;
@@ -71,46 +80,72 @@ var gameLogic;
             myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
             yourP = { row: row, col: col };
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false, buffer: null };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false, buffer: null, missle: missle, radar: radar };
     }
     gameLogic.moveState = moveState;
-    function shotState(stateBeforeMove, turnIndexBeforeMove, row, col) {
+    function crossMissle(board, row, col) {
+        for (var i = -1; i <= 1; i++) {
+            for (var j = -1; j <= 1; j++) {
+                if ((0 <= row + i) && (row + i <= gameLogic.ROWS) && (0 <= col + j) && (col + j <= gameLogic.COLS)) {
+                    if ((i == -1 && j == -1) || (i == -1 && j == 1) || (i == 1 && j == -1) || (i == 1 && j == 1))
+                        continue;
+                    if (board[row + i][col + j] == 'O')
+                        board[row + i][col + j] = 'X';
+                    else if (board[row + i][col + j] == '')
+                        board[row + i][col + j] = 'M';
+                    else if (board[row + i][col + j] == 'X')
+                        board[row + i][col + j] = 'X';
+                }
+            }
+        }
+        return board;
+    }
+    gameLogic.crossMissle = crossMissle;
+    function shotState(stateBeforeMove, turnIndexBeforeMove, row, col, weapons) {
         var originRow;
         var originCol;
         var board = stateBeforeMove.myBoard;
+        var missle = stateBeforeMove.missle;
+        var radar = stateBeforeMove.radar;
         var myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
         var yourP = { row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col };
-        if (board[row][col] == '') {
-            console.log("shot miss!!");
-            board[row][col] = 'M';
+        if (weapons[0] == true) {
+            board = crossMissle(board, row, col);
+            missle[turnIndexBeforeMove] = true;
         }
         else {
-            console.log("shot hit!!");
-            if (turnIndexBeforeMove == 0) {
-                originRow = stateBeforeMove.myShip.row;
-                originCol = stateBeforeMove.myShip.col;
-                if (row != originRow && col != originCol)
-                    if (board[row][col] == 'O') {
-                        console.log("O -> X");
-                        board[row][col] = 'X';
-                    }
+            if (board[row][col] == '') {
+                console.log("shot miss!!");
+                board[row][col] = 'M';
             }
             else {
-                originRow = stateBeforeMove.yourShip.row;
-                originCol = stateBeforeMove.yourShip.col;
-                if (row != originRow && col != originCol)
-                    if (board[row][col] == 'O') {
-                        console.log("O -> X");
-                        board[row][col] = 'X';
-                    }
-                myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
-                yourP = { row: originRow, col: originCol };
+                console.log("shot hit!!");
+                if (turnIndexBeforeMove == 0) {
+                    originRow = stateBeforeMove.myShip.row;
+                    originCol = stateBeforeMove.myShip.col;
+                    if (row != originRow && col != originCol)
+                        if (board[row][col] == 'O') {
+                            console.log("O -> X");
+                            board[row][col] = 'X';
+                        }
+                }
+                else {
+                    originRow = stateBeforeMove.yourShip.row;
+                    originCol = stateBeforeMove.yourShip.col;
+                    if (row != originRow && col != originCol)
+                        if (board[row][col] == 'O') {
+                            console.log("O -> X");
+                            board[row][col] = 'X';
+                        }
+                    myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
+                    yourP = { row: originRow, col: originCol };
+                }
             }
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true, buffer: { row: row, col: col } };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true, buffer: { row: row, col: col }, missle: missle, radar: radar };
     }
     gameLogic.shotState = shotState;
-    function createMove(stateBeforeMove, row, col, turnIndexBeforeMove) {
+    function createMove(stateBeforeMove, row, col, turnIndexBeforeMove, weapons) {
         if (!stateBeforeMove) {
             stateBeforeMove = getInitialState();
         }
@@ -127,7 +162,7 @@ var gameLogic;
             endMatchScores = null;
         }
         else {
-            stateAfterMove = shotState(stateBeforeMove, turnIndexBeforeMove, row, col);
+            stateAfterMove = shotState(stateBeforeMove, turnIndexBeforeMove, row, col, weapons);
             turnIndex = 1 - turnIndexBeforeMove;
             endMatchScores = null;
             console.log("state after shot:", stateAfterMove);

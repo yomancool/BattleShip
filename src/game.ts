@@ -7,17 +7,10 @@ interface SupportedLanguages {
 
 
 module game {
-
-  /**Missle */
-  export let crossMissle: boolean = false;
-  export function turnMissle() { crossMissle = !crossMissle;}
-  export function fireMissle(row:number, col:number):void {
-    
-  }
-
-  /**Radar */
-  export let radar: boolean = false;
-  export function turnRadar() {radar = !radar;}
+  //weapons: 0 -> missle, 1 -> radar
+  export let weapons: boolean[] = [];
+  weapons[0] = false;
+  weapons[1] = false;
 
   export let $rootScope: angular.IScope = null;
   export let $timeout: angular.ITimeoutService = null;
@@ -121,7 +114,6 @@ module game {
     currentUpdateUI = params;
     clearAnimationTimeout();
     state = params.state;
-
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       console.log("initial move!!!!!!!!!: ", state);
@@ -272,6 +264,38 @@ module game {
     }
   }
 
+  //missle
+  export function turnMissle() { 
+    if(state.missle[currentUpdateUI.yourPlayerIndex]) {
+      //window.alert("already use missle!");
+      return;
+    }
+    if(state.move == true)
+      weapons[0] = !weapons[0];
+    else {
+      window.alert("only use missle during shooting!");
+    }
+  }
+  export function usedMissle():boolean {
+    return state.missle[currentUpdateUI.yourPlayerIndex];
+  }
+
+  /**Radar */
+  export function turnRadar() {
+    if(state.missle[currentUpdateUI.yourPlayerIndex]) {
+      //window.alert("already use radar!");
+      return;
+    }
+    if(state.move == true)
+      weapons[1] = !weapons[1];
+    else {
+      window.alert("only use radar during shooting!");
+    }
+  }
+  export function usedRadar():boolean {
+    return state.radar[currentUpdateUI.yourPlayerIndex];
+  }
+
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
@@ -279,14 +303,13 @@ module game {
       document.getElementById("move").style.display = "block";
       return;
     }
-
     if (!isHumanTurn()) return;
     document.getElementById("move").style.display = "none";
 
     let nextMove: IMove = null;
     try {
       nextMove = gameLogic.createMove(
-          state, row, col, currentUpdateUI.turnIndex);
+          state, row, col, currentUpdateUI.turnIndex, weapons);
     } catch (e) {
       log.info(["Cell is already full in position:", row, col]);
       return;
@@ -297,6 +320,8 @@ module game {
     state = nextUpdateUI.state;
     console.log("state after move: ",state);
     updateUI(nextUpdateUI);
+    weapons[0] = false;
+    weapons[1] = false;
     // Move is legal, make it!
     console.log("nextMove: ",nextMove);
     if(state.shot==true)

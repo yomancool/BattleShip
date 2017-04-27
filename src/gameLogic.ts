@@ -1,9 +1,10 @@
 type Board = string[][];
+type Missle = boolean[];
+type Radar = boolean[];
 interface BoardDelta {
   row: number;
   col: number;
 }
-
 type IProposalData = BoardDelta;
 
 interface IState {
@@ -15,6 +16,8 @@ interface IState {
   move: boolean;
   shot: boolean;
   buffer: BoardDelta;
+  missle: Missle;
+  radar: Radar;
 }
 
 import gameService = gamingPlatform.gameService;
@@ -31,12 +34,19 @@ module gameLogic {
   export function getInitialState(): IState {
     if(1) {
       let board: Board = [];
+      let missle: Missle = [];
+      let radar: Radar = [];
       for (let i = 0; i < ROWS; i++) {
         board[i] = [];
         for (let j = 0; j < COLS; j++) {
           board[i][j] = '';
         }
       }
+      //initial missle
+      missle[0] = false;
+      missle[1] = false;
+      radar[0] = false;
+      radar[1] = false;
       // random starting point
       let mine = Math.floor((Math.random() * ROWS));
       let your = Math.floor((Math.random() * COLS));
@@ -44,7 +54,7 @@ module gameLogic {
       board[0][mine] = 'O';
       board[ROWS-1][your] = 'O';
       
-      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:ROWS-1,col:your}, move:false, shot:false, buffer:null};
+      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:ROWS-1,col:your}, move:false, shot:false, buffer:null, missle:missle, radar:radar};
     }  
 }
 
@@ -79,6 +89,9 @@ module gameLogic {
     let originRow;
     let originCol;
     let board = stateBeforeMove.myBoard;
+    let missle = stateBeforeMove.missle;
+    let radar = stateBeforeMove.radar;
+
     if(turnIndexBeforeMove==0) {  //I move
           originRow = stateBeforeMove.myShip.row;
           originCol = stateBeforeMove.myShip.col;
@@ -99,52 +112,80 @@ module gameLogic {
           myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
           yourP = {row: row, col: col};
         }
-    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true, shot:false, buffer:null}
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true, shot:false, buffer:null, missle:missle, radar:radar}
   }
 
-    export function shotState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number): IState {
+    export function crossMissle(board:Board, row:number, col:number):Board {
+      
+      for(let i=-1; i<=1; i++) {
+        for(let j=-1; j<=1; j++) {
+          if((0 <= row+i) && (row+i <= ROWS) && (0 <= col+j) && (col+j <= COLS)) {
+            if( (i==-1 && j==-1) || (i==-1 && j==1) || (i==1 && j==-1) || (i==1 && j==1))
+              continue;
+              if(board[row+i][col+j] == 'O')
+                board[row+i][col+j] = 'X';
+              else if(board[row+i][col+j] == '')
+                board[row+i][col+j] = 'M';
+              else if(board[row+i][col+j] == 'X')
+                board[row+i][col+j] = 'X';
+
+            }
+        }
+      }
+      
+      
+      return board;
+    }
+
+    export function shotState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number, weapons:boolean[]): IState {
     let originRow;
     let originCol;
     let board = stateBeforeMove.myBoard;
-    
+    let missle = stateBeforeMove.missle;
+    let radar = stateBeforeMove.radar;
     let myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
     let yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
-
-    if(board[row][col]=='') {//miss 
-      console.log("shot miss!!");
-      board[row][col] = 'M';
+    if(weapons[0] == true) {
+      board = crossMissle(board,row,col);
+      missle[turnIndexBeforeMove] = true;
     }
-    else {  //hit
-      console.log("shot hit!!");
-      if(turnIndexBeforeMove==0) {  //I move
-          originRow = stateBeforeMove.myShip.row;
-          originCol = stateBeforeMove.myShip.col;
-          if(row != originRow && col != originCol)
-            if(board[row][col]=='O') {
-              console.log("O -> X");
-              board[row][col]='X';
-            }
-        }
-        else {
-          originRow = stateBeforeMove.yourShip.row;
-          originCol = stateBeforeMove.yourShip.col;
+    else {
+      if(board[row][col]=='') {//miss 
+        console.log("shot miss!!");
+        board[row][col] = 'M';
+      }
+      else {  //hit
+        console.log("shot hit!!");
+        if(turnIndexBeforeMove==0) {  //I move
+            originRow = stateBeforeMove.myShip.row;
+            originCol = stateBeforeMove.myShip.col;
+            if(row != originRow && col != originCol)
+              if(board[row][col]=='O') {
+                console.log("O -> X");
+                board[row][col]='X';
+              }
+          }
+          else {
+            originRow = stateBeforeMove.yourShip.row;
+            originCol = stateBeforeMove.yourShip.col;
 
-          if(row != originRow && col != originCol)
-            if(board[row][col]=='O') {
-              console.log("O -> X");
-              board[row][col]='X';
-            }
+            if(row != originRow && col != originCol)
+              if(board[row][col]=='O') {
+                console.log("O -> X");
+                board[row][col]='X';
+              }
 
-          myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
-          yourP = {row: originRow, col: originCol};
-        }
+            myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
+            yourP = {row: originRow, col: originCol};
+          }
+      }
     }
     
-    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false, shot:true, buffer:{row,col}}
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false, shot:true, buffer:{row,col}, missle:missle, radar:radar}
   }
 
   export function createMove(
-      stateBeforeMove: IState, row: number, col: number, turnIndexBeforeMove: number): IMove {
+      stateBeforeMove: IState, row: number, col: number, turnIndexBeforeMove: number, weapons: boolean[]): IMove {
 
     
     if (!stateBeforeMove) {
@@ -166,7 +207,7 @@ module gameLogic {
       endMatchScores = null;
     }
     else {
-      stateAfterMove = shotState(stateBeforeMove,turnIndexBeforeMove,row,col);
+      stateAfterMove = shotState(stateBeforeMove,turnIndexBeforeMove,row,col,weapons);
       turnIndex = 1 - turnIndexBeforeMove;
       endMatchScores = null;
       console.log("state after shot:", stateAfterMove);
@@ -184,7 +225,6 @@ module gameLogic {
     }
 
     let delta: BoardDelta = {row: row, col: col};
-
     let state: IState = stateAfterMove;
 
     return {endMatchScores: endMatchScores, turnIndex: turnIndex, state: state};
