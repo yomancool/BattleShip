@@ -1,7 +1,7 @@
 ;
 var game;
 (function (game) {
-    //weapons: 0 -> missle, 1 -> radar
+    //weapons: 0 -> missile, 1 -> radar
     game.weapons = [];
     game.weapons[0] = false;
     game.weapons[1] = false;
@@ -241,26 +241,26 @@ var game;
         }
     }
     game.valid = valid;
-    //missle
-    function turnMissle() {
-        if (game.state.missle[game.currentUpdateUI.yourPlayerIndex]) {
-            //window.alert("already use missle!");
+    //missile
+    function turnmissile() {
+        if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
+            //window.alert("already use missile!");
             return;
         }
         if (game.state.move == true)
             game.weapons[0] = !game.weapons[0];
         else {
-            window.alert("only use missle during shooting!");
+            window.alert("only use missile during shooting!");
         }
     }
-    game.turnMissle = turnMissle;
-    function usedMissle() {
-        return game.state.missle[game.currentUpdateUI.yourPlayerIndex];
+    game.turnmissile = turnmissile;
+    function usedmissile() {
+        return game.state.missile[game.currentUpdateUI.yourPlayerIndex];
     }
-    game.usedMissle = usedMissle;
+    game.usedmissile = usedmissile;
     /**Radar */
     function turnRadar() {
-        if (game.state.missle[game.currentUpdateUI.yourPlayerIndex]) {
+        if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
             //window.alert("already use radar!");
             return;
         }
