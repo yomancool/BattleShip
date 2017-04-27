@@ -7,7 +7,7 @@ interface SupportedLanguages {
 
 
 module game {
-  //weapons: 0 -> missle, 1 -> radar
+  //weapons: 0 -> missile, 1 -> radar
   export let weapons: boolean[] = [];
   weapons[0] = false;
   weapons[1] = false;
@@ -264,25 +264,25 @@ module game {
     }
   }
 
-  //missle
-  export function turnMissle() { 
-    if(state.missle[currentUpdateUI.yourPlayerIndex]) {
-      //window.alert("already use missle!");
+  //missile
+  export function turnmissile() { 
+    if(state.missile[currentUpdateUI.yourPlayerIndex]) {
+      //window.alert("already use missile!");
       return;
     }
     if(state.move == true)
       weapons[0] = !weapons[0];
     else {
-      window.alert("only use missle during shooting!");
+      window.alert("only use missile during shooting!");
     }
   }
-  export function usedMissle():boolean {
-    return state.missle[currentUpdateUI.yourPlayerIndex];
+  export function usedmissile():boolean {
+    return state.missile[currentUpdateUI.yourPlayerIndex];
   }
 
   /**Radar */
   export function turnRadar() {
-    if(state.missle[currentUpdateUI.yourPlayerIndex]) {
+    if(state.missile[currentUpdateUI.yourPlayerIndex]) {
       //window.alert("already use radar!");
       return;
     }

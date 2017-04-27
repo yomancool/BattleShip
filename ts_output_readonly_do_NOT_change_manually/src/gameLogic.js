@@ -11,7 +11,7 @@ var gameLogic;
     function getInitialState() {
         if (1) {
             var board = [];
-            var missle = [];
+            var missile = [];
             var radar = [];
             for (var i = 0; i < gameLogic.ROWS; i++) {
                 board[i] = [];
@@ -19,9 +19,9 @@ var gameLogic;
                     board[i][j] = '';
                 }
             }
-            //initial missle
-            missle[0] = false;
-            missle[1] = false;
+            //initial missile
+            missile[0] = false;
+            missile[1] = false;
             radar[0] = false;
             radar[1] = false;
             // random starting point
@@ -29,7 +29,7 @@ var gameLogic;
             var your = Math.floor((Math.random() * gameLogic.COLS));
             board[0][mine] = 'O';
             board[gameLogic.ROWS - 1][your] = 'O';
-            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: gameLogic.ROWS - 1, col: your }, move: false, shot: false, buffer: null, missle: missle, radar: radar };
+            return { myBoard: board, delta: null, start: 1, myShip: { row: 0, col: mine }, yourShip: { row: gameLogic.ROWS - 1, col: your }, move: false, shot: false, buffer: null, missile: missile, radar: radar };
         }
     }
     gameLogic.getInitialState = getInitialState;
@@ -62,7 +62,7 @@ var gameLogic;
         var originRow;
         var originCol;
         var board = stateBeforeMove.myBoard;
-        var missle = stateBeforeMove.missle;
+        var missile = stateBeforeMove.missile;
         var radar = stateBeforeMove.radar;
         if (turnIndexBeforeMove == 0) {
             originRow = stateBeforeMove.myShip.row;
@@ -80,10 +80,10 @@ var gameLogic;
             myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
             yourP = { row: row, col: col };
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false, buffer: null, missle: missle, radar: radar };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: true, shot: false, buffer: null, missile: missile, radar: radar };
     }
     gameLogic.moveState = moveState;
-    function crossMissle(board, row, col, turnIndex, state) {
+    function crossmissile(board, row, col, turnIndex, state) {
         var shipRow, shipCol;
         if (turnIndex == 0) {
             shipRow = state.myShip.row;
@@ -109,18 +109,18 @@ var gameLogic;
         }
         return board;
     }
-    gameLogic.crossMissle = crossMissle;
+    gameLogic.crossmissile = crossmissile;
     function shotState(stateBeforeMove, turnIndexBeforeMove, row, col, weapons) {
         var originRow;
         var originCol;
         var board = stateBeforeMove.myBoard;
-        var missle = stateBeforeMove.missle;
+        var missile = stateBeforeMove.missile;
         var radar = stateBeforeMove.radar;
         var myP = { row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col };
         var yourP = { row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col };
         if (weapons[0] == true) {
-            board = crossMissle(board, row, col, turnIndexBeforeMove, stateBeforeMove);
-            missle[turnIndexBeforeMove] = true;
+            board = crossmissile(board, row, col, turnIndexBeforeMove, stateBeforeMove);
+            missile[turnIndexBeforeMove] = true;
         }
         else {
             if (board[row][col] == '') {
@@ -151,7 +151,7 @@ var gameLogic;
                 }
             }
         }
-        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true, buffer: { row: row, col: col }, missle: missle, radar: radar };
+        return { myBoard: board, delta: null, start: 1, myShip: myP, yourShip: yourP, move: false, shot: true, buffer: { row: row, col: col }, missile: missile, radar: radar };
     }
     gameLogic.shotState = shotState;
     function createMove(stateBeforeMove, row, col, turnIndexBeforeMove, weapons) {
