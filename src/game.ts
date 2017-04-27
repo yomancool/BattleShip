@@ -10,7 +10,7 @@ module game {
 
   export let crossMissle: boolean = false;
   export function turnMissle() { crossMissle = !crossMissle;}
-  
+
   export let radar: boolean = false;
   export function turnRadar() {radar = !radar;}
 
@@ -308,6 +308,13 @@ export function cursor():boolean{
     return false;
 }
 
+export function showShipMy(): boolean{
+  console.log("currentUpdateUI: ",currentUpdateUI);
+  if(currentUpdateUI.yourPlayerIndex == 1)
+    return true;
+  return false;
+}
+
 export function moveArea(row:number,col:number):boolean {
   let myRow = state.myShip.row;
   let myCol = state.myShip.col;
@@ -334,6 +341,7 @@ export function moveArea(row:number,col:number):boolean {
   }
   return false;
 }
+
   export function missArea(row:number,col:number): boolean {
     if(state.myBoard[row][col]=='M')
       return true;
@@ -419,7 +427,7 @@ export function moveArea(row:number,col:number):boolean {
           state.delta.row === row && state.delta.col === col;
   }
 
-  
+
 
 }
 

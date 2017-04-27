@@ -163,6 +163,7 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
+            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
@@ -281,6 +282,13 @@ var game;
             return false;
     }
     game.cursor = cursor;
+    function showShipMy() {
+        console.log("currentUpdateUI: ", game.currentUpdateUI);
+        if (game.currentUpdateUI.yourPlayerIndex == 1)
+            return true;
+        return false;
+    }
+    game.showShipMy = showShipMy;
     function moveArea(row, col) {
         var myRow = game.state.myShip.row;
         var myCol = game.state.myShip.col;
