@@ -353,16 +353,7 @@ var game;
     }
     game.missArea = missArea;
     function shotArea(row, col) {
-        var shipRow, shipCol;
-        if (game.currentUpdateUI.yourPlayerIndex == 1) {
-            shipRow = game.state.myShip.row;
-            shipCol = game.state.myShip.col;
-        }
-        else {
-            shipRow = game.state.yourShip.row;
-            shipCol = game.state.yourShip.col;
-        }
-        if (row == shipRow && col == shipCol && game.state.myBoard[shipRow][shipCol] == 'X')
+        if (game.state.myBoard[row][col] == 'X')
             return true;
         return false;
     }
@@ -404,6 +395,8 @@ var game;
     game.previousShot = previousShot;
     function shouldShowImage(row, col) {
         //console.log("state: ",state);
+        if (game.state.myBoard[row][col] == 'X')
+            return true;
         if (game.currentUpdateUI.yourPlayerIndex == 0) {
             if (game.state.myShip.row == row && game.state.myShip.col == col)
                 return true;

@@ -267,7 +267,7 @@ module game {
   }
 
   //missile
-  export function turnmissile() { 
+  export function turnmissile() {
     if(state.missile[currentUpdateUI.yourPlayerIndex]) {
       //window.alert("already use missile!");
       return;
@@ -379,16 +379,7 @@ export function moveArea(row:number,col:number):boolean {
   }
 
   export function shotArea(row: number, col:number): boolean {
-    let shipRow, shipCol;
-    if(currentUpdateUI.yourPlayerIndex==1) {
-      shipRow = state.myShip.row;
-      shipCol = state.myShip.col;
-    }
-    else {
-      shipRow = state.yourShip.row;
-      shipCol = state.yourShip.col;
-    }
-    if(row == shipRow && col == shipCol && state.myBoard[shipRow][shipCol]=='X')  //enemy is shot!!
+    if(state.myBoard[row][col]=='X')  //enemy is shot!!
       return true;
 
     return false;
@@ -434,6 +425,7 @@ export function moveArea(row:number,col:number):boolean {
 
   export function shouldShowImage(row: number, col: number): boolean {
     //console.log("state: ",state);
+    if(state.myBoard[row][col]=='X') return true;
     if(currentUpdateUI.yourPlayerIndex==0) {
       if(state.myShip.row == row && state.myShip.col ==col)
         return true;
@@ -477,15 +469,15 @@ export function moveArea(row:number,col:number):boolean {
     }
     if(row == shipRow && col == shipCol)
       return false;
-      
+
     if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) )
       return true;
-    
-    
-    
+
+
+
     return false;
   }
-  
+
 }
 
 angular.module('myApp', ['gameServices'])
