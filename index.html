@@ -72,10 +72,10 @@
         ng-click="game.cellClickedMy(row, col)"
         id="{{'my' + row + 'x' + col}}">
       <div style="width:100%; height: 100%"
-          ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col)}"
+          ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col),}"
           ng-if="game.shouldShowImage(row, col)">
-          <img src="css/ship.gif" width="100%" height="100%" position='absolute' margin='auto'>
-          <class="ship" img src="css/ship.gif" width=100% height=100% position='absolute' margin='auto'>
+          <img class="ship" ng-if="!game.showShipMy() && !game.shotArea(row,col)" src = 'css/ship2.gif' width="100%" height="100%" position='absolute' >
+          <img class="ship" ng-if="game.showShipMy() && !game.shotArea(row,col)" src = 'css/ship1.gif' width="100%" height="100%" position='absolute' >
       </div>
     </div>
   </div>

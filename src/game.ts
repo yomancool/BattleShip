@@ -7,10 +7,12 @@ interface SupportedLanguages {
 
 
 module game {
+
   //weapons: 0 -> missile, 1 -> radar
   export let weapons: boolean[] = [];
   weapons[0] = false;
   weapons[1] = false;
+
 
   export let $rootScope: angular.IScope = null;
   export let $timeout: angular.ITimeoutService = null;
@@ -336,6 +338,13 @@ export function cursor():boolean{
     return false;
 }
 
+export function showShipMy(): boolean{
+  console.log("currentUpdateUI: ",currentUpdateUI);
+  if(currentUpdateUI.yourPlayerIndex == 1)
+    return true;
+  return false;
+}
+
 export function moveArea(row:number,col:number):boolean {
   let myRow = state.myShip.row;
   let myCol = state.myShip.col;
@@ -362,6 +371,7 @@ export function moveArea(row:number,col:number):boolean {
   }
   return false;
 }
+
   export function missArea(row:number,col:number): boolean {
     if(state.myBoard[row][col]=='M')
       return true;
@@ -447,12 +457,14 @@ export function moveArea(row:number,col:number):boolean {
           state.delta.row === row && state.delta.col === col;
   }
 
+
   export let mouseRow:number = -1;
   export let mouseCol:number = -1;
 
   export function crossHover(row: number,col: number,mouseRow: number,mouseCol: number): boolean {
     if(weapons[0]==false)
       return false;
+
 
     let shipRow, shipCol;
     if(currentUpdateUI.turnIndex==0) {
