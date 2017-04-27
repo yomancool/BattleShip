@@ -8,11 +8,11 @@ interface SupportedLanguages {
 
 module game {
 
-  export let crossMissle: boolean = false;
-  export function turnMissle() { crossMissle = !crossMissle;}
+  //weapons: 0 -> missile, 1 -> radar
+  export let weapons: boolean[] = [];
+  weapons[0] = false;
+  weapons[1] = false;
 
-  export let radar: boolean = false;
-  export function turnRadar() {radar = !radar;}
 
   export let $rootScope: angular.IScope = null;
   export let $timeout: angular.ITimeoutService = null;
@@ -116,7 +116,6 @@ module game {
     currentUpdateUI = params;
     clearAnimationTimeout();
     state = params.state;
-
     if (isFirstMove()) {
       state = gameLogic.getInitialState();
       console.log("initial move!!!!!!!!!: ", state);
@@ -267,23 +266,52 @@ module game {
     }
   }
 
+  //missile
+  export function turnmissile() { 
+    if(state.missile[currentUpdateUI.yourPlayerIndex]) {
+      //window.alert("already use missile!");
+      return;
+    }
+    if(state.move == true)
+      weapons[0] = !weapons[0];
+    else {
+      window.alert("only use missile during shooting!");
+    }
+  }
+  export function usedmissile():boolean {
+    return state.missile[currentUpdateUI.yourPlayerIndex];
+  }
+
+  /**Radar */
+  export function turnRadar() {
+    if(state.missile[currentUpdateUI.yourPlayerIndex]) {
+      //window.alert("already use radar!");
+      return;
+    }
+    if(state.move == true)
+      weapons[1] = !weapons[1];
+    else {
+      window.alert("only use radar during shooting!");
+    }
+  }
+  export function usedRadar():boolean {
+    return state.radar[currentUpdateUI.yourPlayerIndex];
+  }
+
 
   export function cellClickedMy(row: number, col: number): void {
     log.info("My Board cell:", row, col);
-          console.log("your row!!!!!!!!!: ", state.yourShip.row);
-      console.log("your col!!!!!!!!!: ", state.yourShip.col);
     if (!valid(row,col)) {
       document.getElementById("move").style.display = "block";
       return;
     }
-
     if (!isHumanTurn()) return;
     document.getElementById("move").style.display = "none";
 
     let nextMove: IMove = null;
     try {
       nextMove = gameLogic.createMove(
-          state, row, col, currentUpdateUI.turnIndex);
+          state, row, col, currentUpdateUI.turnIndex, weapons);
     } catch (e) {
       log.info(["Cell is already full in position:", row, col]);
       return;
@@ -294,6 +322,8 @@ module game {
     state = nextUpdateUI.state;
     console.log("state after move: ",state);
     updateUI(nextUpdateUI);
+    weapons[0] = false;
+    weapons[1] = false;
     // Move is legal, make it!
     console.log("nextMove: ",nextMove);
     if(state.shot==true)
@@ -428,7 +458,34 @@ export function moveArea(row:number,col:number):boolean {
   }
 
 
+  export let mouseRow:number = -1;
+  export let mouseCol:number = -1;
 
+  export function crossHover(row: number,col: number,mouseRow: number,mouseCol: number): boolean {
+    if(weapons[0]==false)
+      return false;
+
+
+    let shipRow, shipCol;
+    if(currentUpdateUI.turnIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    if(row == shipRow && col == shipCol)
+      return false;
+      
+    if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) )
+      return true;
+    
+    
+    
+    return false;
+  }
+  
 }
 
 angular.module('myApp', ['gameServices'])
