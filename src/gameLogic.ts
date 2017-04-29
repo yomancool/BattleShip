@@ -140,8 +140,6 @@ module gameLogic {
             }
         }
       }
-      
-      
       return board;
     }
 
