@@ -26,10 +26,10 @@
 
 <body ng-cloak>
 <!-- weapon area -->
-<button ng-click="game.turnmissile()">use missile</button>
+<button class="buttonUI" height="35" ng-click="game.turnmissile()"><img src="css/missile.png" height="15"/>   Use missile</button>
 <div ng-if="game.weapons[0]"> using missile </div>
 <div ng-if="game.usedmissile()"> missile used out! </div>
-<button ng-click="game.turnRadar()">use Radar</button>
+<button class="buttonUI" ng-click="game.turnRadar()"><img src="css/radar.png" height="15"/>   Use Radar</button>
 <div ng-if="game.weapons[1]"> using Radar </div>
 <div ng-if="game.usedRadar()"> radar used out! </div>
 <!-- status area -->
@@ -75,7 +75,7 @@
           ng-if="game.shouldShowImage(row, col)">
           <img class="ship" ng-if="!game.showShipMy() && !game.shotArea(row,col)" src = 'css/ship2.gif' width="100%" height="100%" position='absolute' >
           <img class="ship" ng-if="game.showShipMy() && !game.shotArea(row,col)" src = 'css/ship1.gif' width="100%" height="100%" position='absolute' >
-          <img class="explode" ng-if="game.shotArea(row,col)" src = 'css/explode.gif' width="150%" height="170%" position='absolute' >
+          <img class="explode" ng-if="game.shotArea(row,col)" src = 'css/explode.gif' width="100%" height="120%" position='absolute' >
       </div>
     </div>
   </div>
