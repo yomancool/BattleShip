@@ -268,6 +268,8 @@ module game {
 
   //missile
   export function turnmissile() {
+    mouseRow = -1;
+    mouseCol = -1;
     if(state.missile[currentUpdateUI.yourPlayerIndex]) {
       //window.alert("already use missile!");
       return;
@@ -331,14 +333,14 @@ module game {
 }
 
 
-export function cursor():boolean{
+export function cursor():boolean {
   if(state.move == true)
     return true;
   else
     return false;
 }
 
-export function showShipMy(): boolean{
+export function showShipMy(): boolean {
   console.log("currentUpdateUI: ",currentUpdateUI);
   if(currentUpdateUI.yourPlayerIndex == 1)
     return true;

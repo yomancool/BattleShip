@@ -161,7 +161,6 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
-            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
@@ -244,6 +243,8 @@ var game;
     game.valid = valid;
     //missile
     function turnmissile() {
+        game.mouseRow = -1;
+        game.mouseCol = -1;
         if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
             //window.alert("already use missile!");
             return;

@@ -64,11 +64,10 @@
         missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 6 && game.distance(row,col) >= 2 && game.previousShot(row,col),
         missAreaNear:game.missArea(row,col) && game.distance(row,col) < 2 && game.previousShot(row,col),
         missArea:game.missArea(row,col),
-        shotArea:game.shotArea(row,col),
         shootingArea:game.shootingArea(row,col) && !game.crossHover(row, col, game.mouseRow, game.mouseCol),
         crossHover:!game.missArea(row,col) && game.crossHover(row, col, game.mouseRow, game.mouseCol)}"
         ng-mouseenter="hover=true; game.mouseRow=row; game.mouseCol=col"
-        ng-mouseleave="hover=false;"
+        ng-mouseleave="hover=false; game.mouseRow=-1; game.mouseCol=-1"
         ng-click="game.cellClickedMy(row, col)"
         id="{{'my' + row + 'x' + col}}">
       <div style="width:100%; height: 100%"

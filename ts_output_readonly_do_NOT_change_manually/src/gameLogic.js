@@ -184,7 +184,6 @@ var gameLogic;
             endMatchScores = winner === "0" ? [1, 0] : winner === "1" ? [0, 1] : [0, 0];
         }
         else {
-            // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
         }
         var delta = { row: row, col: col };
         var state = stateAfterMove;
