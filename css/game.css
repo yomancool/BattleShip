@@ -49,15 +49,15 @@ body {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-<<<<<<< HEAD
+
 }
 
 .gameStatus{
   margin:0px auto;
-=======
+
   background-image: url(css/radar.png); no-repeat left center;
   padding-left: 20px;
->>>>>>> origin/gh-pages
+
 }
 
 .buttonUI:hover{
@@ -65,12 +65,12 @@ body {
 }
 
 
-<<<<<<< HEAD
+
 .showStatus{
   position:float;
 }
 
-=======
+
 .cube-Near {
   width:50px;
   height:50px;
@@ -91,7 +91,7 @@ body {
   height:50px;
   background: black;
 }
->>>>>>> origin/gh-pages
+
 
 #gameArea{
   /*transform: rotate(10deg);*/
