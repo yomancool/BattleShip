@@ -247,11 +247,13 @@ var game;
         game.mouseRow = -1;
         game.mouseCol = -1;
         if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
-            //window.alert("already use missile!");
             return;
         }
         if (game.state.move == true)
-            game.weapons[0] = !game.weapons[0];
+            if ((game.weapons[1] == true && game.state.radar[game.currentUpdateUI.yourPlayerIndex] == false))
+                window.alert("only use one weapon!");
+            else
+                game.weapons[0] = !game.weapons[0];
         else {
             window.alert("only use missile during shooting!");
         }
@@ -263,12 +265,18 @@ var game;
     game.usedmissile = usedmissile;
     /**Radar */
     function turnRadar() {
-        if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
-            //window.alert("already use radar!");
+        game.mouseRow = -1;
+        game.mouseCol = -1;
+        if (game.state.radar[game.currentUpdateUI.yourPlayerIndex]) {
             return;
         }
-        if (game.state.move == true)
-            game.weapons[1] = !game.weapons[1];
+        if (game.state.move == true) {
+            if ((game.weapons[0] == true && game.state.missile[game.currentUpdateUI.yourPlayerIndex] == false)) {
+                window.alert("only use one weapon!");
+            }
+            else
+                game.weapons[1] = !game.weapons[1];
+        }
         else {
             window.alert("only use radar during shooting!");
         }
@@ -317,7 +325,6 @@ var game;
     }
     game.cursor = cursor;
     function showShipMy() {
-        console.log("currentUpdateUI: ", game.currentUpdateUI);
         if (game.currentUpdateUI.yourPlayerIndex == 1)
             return true;
         return false;
@@ -442,6 +449,25 @@ var game;
         return false;
     }
     game.crossHover = crossHover;
+    function radarHover(row, col, mouseRow, mouseCol) {
+        if (game.weapons[1] == false)
+            return false;
+        var shipRow, shipCol;
+        if (game.currentUpdateUI.turnIndex == 0) {
+            shipRow = game.state.myShip.row;
+            shipCol = game.state.myShip.col;
+        }
+        else {
+            shipRow = game.state.yourShip.row;
+            shipCol = game.state.yourShip.col;
+        }
+        if (row == shipRow && col == shipCol)
+            return false;
+        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col))
+            return true;
+        return false;
+    }
+    game.radarHover = radarHover;
 })(game || (game = {}));
 angular.module('myApp', ['gameServices'])
     .run(['$rootScope', '$timeout',

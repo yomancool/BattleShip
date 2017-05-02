@@ -271,15 +271,18 @@ module game {
     mouseRow = -1;
     mouseCol = -1;
     if(state.missile[currentUpdateUI.yourPlayerIndex]) {
-      //window.alert("already use missile!");
       return;
     }
     if(state.move == true)
-      weapons[0] = !weapons[0];
+      if((weapons[1]==true && state.radar[currentUpdateUI.yourPlayerIndex]==false))
+        window.alert("only use one weapon!");
+      else
+        weapons[0] = !weapons[0];
     else {
       window.alert("only use missile during shooting!");
     }
   }
+
   export function usedmissile():boolean {
     return state.missile[currentUpdateUI.yourPlayerIndex];
   }
@@ -288,16 +291,23 @@ module game {
 
   /**Radar */
   export function turnRadar() {
-    if(state.missile[currentUpdateUI.yourPlayerIndex]) {
-      //window.alert("already use radar!");
+    mouseRow = -1;
+    mouseCol = -1;
+    if(state.radar[currentUpdateUI.yourPlayerIndex]) {
       return;
     }
-    if(state.move == true)
+    if(state.move == true) {
+      if((weapons[0]==true && state.missile[currentUpdateUI.yourPlayerIndex]==false)) {
+        window.alert("only use one weapon!");
+      }
+      else
       weapons[1] = !weapons[1];
+    }
     else {
       window.alert("only use radar during shooting!");
     }
   }
+
   export function usedRadar():boolean {
     return state.radar[currentUpdateUI.yourPlayerIndex];
   }
@@ -343,7 +353,6 @@ export function cursor():boolean {
 }
 
 export function showShipMy(): boolean {
-  console.log("currentUpdateUI: ",currentUpdateUI);
   if(currentUpdateUI.yourPlayerIndex == 1)
     return true;
   return false;
@@ -460,8 +469,6 @@ export function moveArea(row:number,col:number):boolean {
   export function crossHover(row: number,col: number,mouseRow: number,mouseCol: number): boolean {
     if(weapons[0]==false)
       return false;
-
-
     let shipRow, shipCol;
     if(currentUpdateUI.turnIndex==0) {
       shipRow = state.myShip.row;
@@ -476,9 +483,26 @@ export function moveArea(row:number,col:number):boolean {
 
     if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) )
       return true;
+    return false;
+  }
 
+  export function radarHover(row: number,col: number,mouseRow: number,mouseCol: number): boolean {
+    if(weapons[1]==false)
+      return false;
+    let shipRow, shipCol;
+    if(currentUpdateUI.turnIndex==0) {
+      shipRow = state.myShip.row;
+      shipCol = state.myShip.col;
+    }
+    else {
+      shipRow = state.yourShip.row;
+      shipCol = state.yourShip.col;
+    }
+    if(row == shipRow && col == shipCol)
+      return false;
 
-
+    if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) )
+      return true;
     return false;
   }
 
