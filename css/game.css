@@ -33,7 +33,8 @@ body {
 }
 
 .background{
-  width: 100%;
+  margin:0px auto;
+  width: 88%;
   height: auto;
 }
 
@@ -41,13 +42,17 @@ body {
   background-color:  #008CBA;
   border: #008CBA;
   color: white;
-  padding: 15px 32px;
+  padding: 15px 20px;
+  margin-right: 10px;
+  margin-top: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  background-image: url(css/radar.png); no-repeat left center;
-  padding-left:20px;
+}
+
+.gameStatus{
+  margin:0px auto;
 }
 
 .buttonUI:hover{
@@ -55,6 +60,9 @@ body {
 }
 
 
+.showStatus{
+  position:float;
+}
 
 
 #gameArea{
@@ -100,6 +108,11 @@ body {
   100% {z-index:0; left:50%;top:50%; }
   }
 */
+
+.controlPanel{
+  position:
+}
+
 .r {
   border-right: 1pt solid white;
 }
