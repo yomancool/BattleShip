@@ -110,6 +110,32 @@ var gameLogic;
         return board;
     }
     gameLogic.crossmissile = crossmissile;
+    function detect(board, row, col, turnIndex, state) {
+        var shipRow, shipCol;
+        if (turnIndex == 0) {
+            shipRow = state.myShip.row;
+            shipCol = state.myShip.col;
+        }
+        else {
+            shipRow = state.yourShip.row;
+            shipCol = state.yourShip.col;
+        }
+        for (var i = -1; i <= 1; i++) {
+            for (var j = -1; j <= 1; j++) {
+                if ((0 <= row + i) && (row + i <= gameLogic.ROWS) && (0 <= col + j) && (col + j <= gameLogic.COLS)) {
+                    if (board[row + i][col + j] == 'O' && (row + i != shipRow && col + j != shipCol)) {
+                        window.alert("foundShip!");
+                        console.log("foundship!!!!!!");
+                        return board;
+                    }
+                }
+            }
+        }
+        window.alert("Ship not found!");
+        console.log("Ship not found!!!!!!");
+        return board;
+    }
+    gameLogic.detect = detect;
     function shotState(stateBeforeMove, turnIndexBeforeMove, row, col, weapons) {
         var originRow;
         var originCol;
@@ -121,6 +147,10 @@ var gameLogic;
         if (weapons[0] == true) {
             board = crossmissile(board, row, col, turnIndexBeforeMove, stateBeforeMove);
             missile[turnIndexBeforeMove] = true;
+        }
+        else if (weapons[1] == true) {
+            board = detect(board, row, col, turnIndexBeforeMove, stateBeforeMove);
+            radar[turnIndexBeforeMove] = true;
         }
         else {
             if (board[row][col] == '') {
@@ -184,7 +214,6 @@ var gameLogic;
             endMatchScores = winner === "0" ? [1, 0] : winner === "1" ? [0, 1] : [0, 0];
         }
         else {
-            // Game continues. Now it's the opponent's turn (the turn switches from 0 to 1 and 1 to 0).
         }
         var delta = { row: row, col: col };
         var state = stateAfterMove;

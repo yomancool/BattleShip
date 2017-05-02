@@ -25,13 +25,7 @@
 </head>
 
 <body ng-cloak>
-<!-- weapon area -->
-<button class="buttonUI" height="35" ng-click="game.turnmissile()"><img src="css/missile.png" height="15"/>   Use missile</button>
-<div ng-if="game.weapons[0]"> using missile </div>
-<div ng-if="game.usedmissile()"> missile used out! </div>
-<button class="buttonUI" ng-click="game.turnRadar()"><img src="css/radar.png" height="15"/>   Use Radar</button>
-<div ng-if="game.weapons[1]"> using Radar </div>
-<div ng-if="game.usedRadar()"> radar used out! </div>
+
 <!-- status area -->
 <div ng-if="!game.firstMove()" id="status">
       <div ng-if="game.isMyTurn() && !game.isGameOver()">
@@ -65,7 +59,8 @@
         missAreaNear:game.missArea(row,col) && game.distance(row,col) < 2 && game.previousShot(row,col),
         missArea:game.missArea(row,col),
         shootingArea:game.shootingArea(row,col) && !game.crossHover(row, col, game.mouseRow, game.mouseCol),
-        crossHover:!game.missArea(row,col) && game.crossHover(row, col, game.mouseRow, game.mouseCol)}"
+        crossHover:!game.missArea(row,col) && game.crossHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[1],
+        radarHover:!game.missArea(row,col) && game.radarHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[0] }"
         ng-mouseenter="hover=true; game.mouseRow=row; game.mouseCol=col"
         ng-mouseleave="hover=false; game.mouseRow=-1; game.mouseCol=-1"
         ng-click="game.cellClickedMy(row, col)"
@@ -79,6 +74,13 @@
       </div>
     </div>
   </div>
+<!-- weapon area -->
+<button class="buttonUI" height="35" ng-click="game.turnmissile()"><img src="css/missile.png" height="15"/>   Use missile</button>
+<div ng-if="game.weapons[0]"> using missile </div>
+<div ng-if="game.usedmissile()"> missile used out! </div>
+<button class="buttonUI" ng-click="game.turnRadar()"><img src="css/radar.png" height="15"/>   Use Radar</button>
+<div ng-if="game.weapons[1]"> using Radar </div>
+<div ng-if="game.usedRadar()"> radar used out! </div>
 </div>
 
 </body>

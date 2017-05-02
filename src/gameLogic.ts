@@ -143,6 +143,33 @@ module gameLogic {
       return board;
     }
 
+    export function detect(board:Board, row:number, col:number, turnIndex:number, state:IState):Board {
+      let shipRow, shipCol;
+      if(turnIndex==0) {
+        shipRow = state.myShip.row;
+        shipCol = state.myShip.col;
+      }
+      else {
+        shipRow = state.yourShip.row;
+        shipCol = state.yourShip.col;
+      }
+
+      for(let i=-1; i<=1; i++) {
+        for(let j=-1; j<=1; j++) {
+          if((0 <= row+i) && (row+i <= ROWS) && (0 <= col+j) && (col+j <= COLS)) { 
+            if(board[row+i][col+j] == 'O' && (row+i!=shipRow && col+j!=shipCol)) {
+              window.alert("foundShip!");
+              console.log("foundship!!!!!!");
+              return board;
+            }
+          }
+        }
+      }
+      window.alert("Ship not found!");
+      console.log("Ship not found!!!!!!");
+      return board;
+    }
+
     export function shotState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number, weapons:boolean[]): IState {
     let originRow;
     let originCol;
@@ -154,6 +181,10 @@ module gameLogic {
     if(weapons[0] == true) {
       board = crossmissile(board,row,col,turnIndexBeforeMove, stateBeforeMove);
       missile[turnIndexBeforeMove] = true;
+    }
+    else if(weapons[1] == true) {
+      board = detect(board,row,col,turnIndexBeforeMove, stateBeforeMove);
+      radar[turnIndexBeforeMove] = true;
     }
     else {
       if(board[row][col]=='') {//miss 
@@ -241,5 +272,5 @@ module gameLogic {
     return {endMatchScores: null, turnIndex: 0,
         state: getInitialState()};
   }
-
+    
 }
