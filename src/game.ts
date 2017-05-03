@@ -287,7 +287,7 @@ module game {
     return state.missile[currentUpdateUI.yourPlayerIndex];
   }
 
-  
+
 
   /**Radar */
   export function turnRadar() {

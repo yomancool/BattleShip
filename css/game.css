@@ -94,7 +94,7 @@ body {
 
 
 #gameArea{
-  /*transform: rotate(10deg);*/
+    position:float;
 }
 
 /*show cover*/
@@ -262,3 +262,25 @@ body {
 
 .menudemoBasicUsage .menu-demo-container {
   min-height: 200px; }
+
+#missileoff {
+    width: 80px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+}
+#missileon {
+    width: 80px;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#radaroff {
+    width: 60px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+}
+#radaron {
+    width: 60px;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
