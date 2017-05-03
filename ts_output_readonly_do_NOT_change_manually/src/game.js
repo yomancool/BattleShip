@@ -5,6 +5,7 @@ var game;
     game.weapons = [];
     game.weapons[0] = false;
     game.weapons[1] = false;
+    game.invalid = false;
     game.$rootScope = null;
     game.$timeout = null;
     // Global variables are cleared when getting updateUI.
@@ -217,10 +218,9 @@ var game;
             shipRow = game.state.yourShip.row;
             shipCol = game.state.yourShip.col;
         }
-        console.log("row: ", shipRow, "col: ", shipCol);
         for (var i = -1; i <= 1; i++)
             for (var j = -1; j <= 1; j++) {
-                if (shipRow + i == row && shipCol + j == col) {
+                if ((shipRow + i == row && shipCol + j == col)) {
                     console.log("valid Move!");
                     return true;
                 }
@@ -249,12 +249,15 @@ var game;
             return;
         }
         if (game.state.move == true)
-            if ((game.weapons[1] == true && game.state.radar[game.currentUpdateUI.yourPlayerIndex] == false))
-                window.alert("only use one weapon!");
-            else
+            if ((game.weapons[1] == true && game.state.radar[game.currentUpdateUI.yourPlayerIndex] == false)) {
+                game.invalid = true;
+            }
+            else {
+                game.invalid = false;
                 game.weapons[0] = !game.weapons[0];
+            }
         else {
-            window.alert("only use missile during shooting!");
+            game.invalid = true;
         }
     }
     game.turnmissile = turnmissile;
@@ -271,13 +274,15 @@ var game;
         }
         if (game.state.move == true) {
             if ((game.weapons[0] == true && game.state.missile[game.currentUpdateUI.yourPlayerIndex] == false)) {
-                window.alert("only use one weapon!");
+                game.invalid = true;
             }
-            else
+            else {
+                game.invalid = false;
                 game.weapons[1] = !game.weapons[1];
+            }
         }
         else {
-            window.alert("only use radar during shooting!");
+            game.invalid = true;
         }
     }
     game.turnRadar = turnRadar;
@@ -288,12 +293,12 @@ var game;
     function cellClickedMy(row, col) {
         log.info("My Board cell:", row, col);
         if (!valid(row, col)) {
-            document.getElementById("move").style.display = "block";
+            game.invalid = true;
             return;
         }
         if (!isHumanTurn())
             return;
-        document.getElementById("move").style.display = "none";
+        game.invalid = false;
         var nextMove = null;
         try {
             nextMove = gameLogic.createMove(game.state, row, col, game.currentUpdateUI.turnIndex, game.weapons);

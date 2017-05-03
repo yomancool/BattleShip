@@ -29,17 +29,8 @@
 <body ng-cloak>
     <!-- status area -->
     <div ng-if="!game.firstMove()" class="showStatus">
-<!--
-        <div ng-if="game.isMyTurn() && !game.isGameOver()">
-            <text>Your turn</text>
-        </div>
-        <div ng-if="!game.isMyTurn() && !game.isGameOver()">
-            <text>Opponent turn.</text>
-        </div>
-        <div ng-if="game.isGameOver()">
-            <text><br/></text>
-        </div>
--->
+        <div ng-if="!game.invalid"><img id="invalidoff" src="css/invalid.png"></div>
+        <div ng-if="game.invalid"><img id="invalidon" src="css/invalid.png"></div>
         <!-- weapon area -->
             <!-- missile -->
             <div ng-if="!game.weapons[0]"><img id="missileoff" src="css/bitmissile.png"> </div>
@@ -47,10 +38,7 @@
             <!-- radar -->
             <div ng-if="!game.weapons[1]"><img id="radaroff" src="css/radarbit.png"> </div>
             <div ng-if="game.weapons[1]"><img id="radaron" src="css/radarbit.png"> </div>
-        <!--            -->
     </div>
-
-    <div id="move" style="display:none">invalid move!</div>
 
     <!-- game area -->
     <div id="gameArea">
@@ -76,8 +64,11 @@
                 </div>
             </div>
         </div>
-        <button class="buttonUI" ng-click="game.turnmissile()" ng-if="!game.usedmissile()"><img src="css/missile.png" height="18"/>   Use missile</button>
-        <button class="buttonUI" ng-click="game.turnRadar()" ng-if="!game.usedRadar()"><img src="css/radar.png" height="18"/>   Use Radar</button>
+        <button class="buttonUI" id="mbuttonoff" ng-if=" !game.usedmissile() && !game.state.move"><img src="css/missile.png" height="18"/>   Use missile</button>
+        <button class="buttonUI" id="mbuttonon" ng-click="game.turnmissile()" ng-if="!game.usedmissile() && game.state.move"><img src="css/missile.png" height="18"/>   Use missile</button>
+        
+        <button class="buttonUI" id="rbuttonoff" ng-if="!game.usedRadar() && !game.state.move"><img src="css/radar.png" height="18"/>   Use Radar</button>
+        <button class="buttonUI" id="rbuttonon" ng-click="game.turnRadar()" ng-if="!game.usedRadar() && game.state.move"><img src="css/radar.png" height="18"/>   Use Radar</button>
     </div>
 
 </body>

@@ -12,7 +12,8 @@ module game {
   export let weapons: boolean[] = [];
   weapons[0] = false;
   weapons[1] = false;
-
+  
+  export let invalid: boolean = false;
 
   export let $rootScope: angular.IScope = null;
   export let $timeout: angular.ITimeoutService = null;
@@ -240,11 +241,10 @@ module game {
       shipRow = state.yourShip.row;
       shipCol = state.yourShip.col;
     }
-    console.log("row: ",shipRow,"col: ",shipCol);
 
     for(let i=-1; i<=1; i++)
       for(let j=-1; j<=1; j++) {
-        if(shipRow+i == row && shipCol+j == col) {
+        if((shipRow+i == row && shipCol+j == col)) {
           console.log("valid Move!");
           return true;
         }
@@ -274,20 +274,21 @@ module game {
       return;
     }
     if(state.move == true)
-      if((weapons[1]==true && state.radar[currentUpdateUI.yourPlayerIndex]==false))
-        window.alert("only use one weapon!");
-      else
+      if((weapons[1]==true && state.radar[currentUpdateUI.yourPlayerIndex]==false)) {
+        invalid = true;
+      }
+      else {
+        invalid = false;
         weapons[0] = !weapons[0];
+      }
     else {
-      window.alert("only use missile during shooting!");
+      invalid = true;
     }
   }
 
   export function usedmissile():boolean {
     return state.missile[currentUpdateUI.yourPlayerIndex];
   }
-
-
 
   /**Radar */
   export function turnRadar() {
@@ -298,13 +299,15 @@ module game {
     }
     if(state.move == true) {
       if((weapons[0]==true && state.missile[currentUpdateUI.yourPlayerIndex]==false)) {
-        window.alert("only use one weapon!");
+        invalid = true;
       }
-      else
+      else {
+      invalid = false;
       weapons[1] = !weapons[1];
+      }
     }
     else {
-      window.alert("only use radar during shooting!");
+      invalid = true;
     }
   }
 
@@ -314,14 +317,14 @@ module game {
 
 
   export function cellClickedMy(row: number, col: number): void {
+    
     log.info("My Board cell:", row, col);
     if (!valid(row,col)) {
-      document.getElementById("move").style.display = "block";
+      invalid = true;
       return;
     }
     if (!isHumanTurn()) return;
-    document.getElementById("move").style.display = "none";
-
+    invalid = false;
     let nextMove: IMove = null;
     try {
       nextMove = gameLogic.createMove(
