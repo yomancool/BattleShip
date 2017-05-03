@@ -2,55 +2,63 @@
 <!-- build:[manifest] index.min.appcache -->
 <html lang="en" ng-app="myApp" ng-strict-di>
 <!-- /build -->
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>BattleShip</title>
-  <meta name="description" content="TicTacToe game">
-  <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,"><!-- Suppress browser request for favicon.ico -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>BattleShip</title>
+    <meta name="description" content="TicTacToe game">
+    <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+    <!-- Suppress browser request for favicon.ico -->
 
-  <!-- To ensure CSS files are downloaded in parallel, always include external CSS before external JavaScript. -->
-  <!-- build:[href] css/everything.min.css -->
-  <link rel="stylesheet" type="text/css" href="css/game.css">
-  <!-- /build -->
+    <!-- To ensure CSS files are downloaded in parallel, always include external CSS before external JavaScript. -->
+    <!-- build:[href] css/everything.min.css -->
+    <link rel="stylesheet" type="text/css" href="css/game.css">
+    <!-- /build -->
 
-  <!-- build:js js/everything.min.js -->
-  <script src="lib/angular.js"></script>
-  <script src="lib/turnBasedServices.4.js"></script>
-  <script src="node_modules/jquery/dist/jquery.js"></script>
-  <script src="ts_output_readonly_do_NOT_change_manually/src/gameLogic.js"></script>
-  <script src="ts_output_readonly_do_NOT_change_manually/src/game.js"></script>
-  <script src="ts_output_readonly_do_NOT_change_manually/src/aiService.js"></script>
-  <!-- /build -->
+    <!-- build:js js/everything.min.js -->
+    <script src="lib/angular.js"></script>
+    <script src="lib/turnBasedServices.4.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="ts_output_readonly_do_NOT_change_manually/src/gameLogic.js"></script>
+    <script src="ts_output_readonly_do_NOT_change_manually/src/game.js"></script>
+    <script src="ts_output_readonly_do_NOT_change_manually/src/aiService.js"></script>
+    <!-- /build -->
 </head>
 
 <body ng-cloak>
-
-<!-- status area -->
-<div ng-if="!game.firstMove()" id="status">
-      <div ng-if="game.isMyTurn() && !game.isGameOver()">
-        <text>Your turn</text>
-      </div>
-      <div ng-if="!game.isMyTurn() && !game.isGameOver()">
-        <text>Opponent turn.</text>
-      </div>
-      <div ng-if="game.isGameOver()">
-        <text><br/></text>
-      </div>
+    <!-- status area -->
+    <div ng-if="!game.firstMove()" class="showStatus">
+<!--
+        <div ng-if="game.isMyTurn() && !game.isGameOver()">
+            <text>Your turn</text>
+        </div>
+        <div ng-if="!game.isMyTurn() && !game.isGameOver()">
+            <text>Opponent turn.</text>
+        </div>
+        <div ng-if="game.isGameOver()">
+            <text><br/></text>
+        </div>
+-->
+        <!-- weapon area -->
+            <!-- missile -->
+            <div ng-if="!game.weapons[0]"><img id="missileoff" src="css/bitmissile.png"> </div>
+            <div ng-if="game.weapons[0]"><img id="missileon" src="css/bitmissile.png"> </div>
+            <!-- radar -->
+            <div ng-if="!game.weapons[1]"><img id="radaroff" src="css/radarbit.png"> </div>
+            <div ng-if="game.weapons[1]"><img id="radaron" src="css/radarbit.png"> </div>
+        <!--            -->
     </div>
-</div>
-<div id="move" style="display:none">invalid move!</div>
 
-<!-- game area -->
-<div id="gameArea">
-  <img class="background" src="css/ocean_b3.gif">
-<!--  <div id="shadow" class="shadow"> </div> -->
+    <div id="move" style="display:none">invalid move!</div>
 
-  <div id="myBoard" ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]"
-      style="position:absolute; top:{{row * 12.5}}%; width:100%; height:12.5%;">
-    <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7]"
-        style="position:absolute; top:0; left:{{col * 12.5}}%; width:12.5%; height:100%;"
-        ng-class="{myhover:hover && !game.missArea(row,col),
+    <!-- game area -->
+    <div id="gameArea">
+        <img class="background" src="css/ocean_b3.gif">
+        <!--  <div id="shadow" class="shadow"> </div> -->
+
+        <div id="myBoard" ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]" style="position:absolute; top:{{row * 11}}%; width:100%; height:11%;">
+            <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7]" style="position:absolute; top:0; left:{{col * 11}}%; width:11%; height:100%;" ng-class="{myhover:hover && !game.missArea(row,col),
         r: col < 10, b: row < 10, t: row < 1, l: col < 1,
         cursor:game.cursor(),
         moveArea:game.moveArea(row,col),
@@ -60,28 +68,18 @@
         missArea:game.missArea(row,col),
         shootingArea:game.shootingArea(row,col) && !game.crossHover(row, col, game.mouseRow, game.mouseCol),
         crossHover:!game.missArea(row,col) && game.crossHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[1],
-        radarHover:!game.missArea(row,col) && game.radarHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[0] }"
-        ng-mouseenter="hover=true; game.mouseRow=row; game.mouseCol=col"
-        ng-mouseleave="hover=false; game.mouseRow=-1; game.mouseCol=-1"
-        ng-click="game.cellClickedMy(row, col)"
-        id="{{'my' + row + 'x' + col}}">
-      <div style="width:100%; height: 100%"
-          ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col),}"
-          ng-if="game.shouldShowImage(row, col)">
-          <img class="ship" ng-if="!game.showShipMy() && !game.shotArea(row,col)" src = 'css/ship2.gif' width="100%" height="100%" position='absolute' >
-          <img class="ship" ng-if="game.showShipMy() && !game.shotArea(row,col)" src = 'css/ship1.gif' width="100%" height="100%" position='absolute' >
-          <img class="explode" ng-if="game.shotArea(row,col)" src = 'css/explode.gif' width="100%" height="120%" position='absolute' >
-      </div>
+        radarHover:!game.missArea(row,col) && game.radarHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[0] }" ng-mouseenter="hover=true; game.mouseRow=row; game.mouseCol=col" ng-mouseleave="hover=false; game.mouseRow=-1; game.mouseCol=-1" ng-click="game.cellClickedMy(row, col)" id="{{'my' + row + 'x' + col}}">
+                <div style="width:100%; height: 100%" ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col),}" ng-if="game.shouldShowImage(row, col)">
+                    <img class="ship" ng-if="!game.showShipMy() && !game.shotArea(row,col)" src='css/ship2.gif' width="100%" height="100%" position='absolute'>
+                    <img class="ship" ng-if="game.showShipMy() && !game.shotArea(row,col)" src='css/ship1.gif' width="100%" height="100%" position='absolute'>
+                    <img class="explode" ng-if="game.shotArea(row,col)" src='css/explode.gif' width="100%" height="120%" position='absolute'>
+                </div>
+            </div>
+        </div>
+        <button class="buttonUI" ng-click="game.turnmissile()" ng-if="!game.usedmissile()"><img src="css/missile.png" height="18"/>   Use missile</button>
+        <button class="buttonUI" ng-click="game.turnRadar()" ng-if="!game.usedRadar()"><img src="css/radar.png" height="18"/>   Use Radar</button>
     </div>
-  </div>
-<!-- weapon area -->
-<button class="buttonUI" height="35" ng-click="game.turnmissile()"><img src="css/missile.png" height="15"/>   Use missile</button>
-<div ng-if="game.weapons[0]"> using missile </div>
-<div ng-if="game.usedmissile()"> missile used out! </div>
-<button class="buttonUI" ng-click="game.turnRadar()"><img src="css/radar.png" height="15"/>   Use Radar</button>
-<div ng-if="game.weapons[1]"> using Radar </div>
-<div ng-if="game.usedRadar()"> radar used out! </div>
-</div>
 
 </body>
+
 </html>

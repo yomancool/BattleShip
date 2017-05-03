@@ -33,7 +33,8 @@ body {
 }
 
 .background{
-  width: 100%;
+  margin:0px auto;
+  width: 88%;
   height: auto;
 }
 
@@ -41,17 +42,32 @@ body {
   background-color:  #008CBA;
   border: #008CBA;
   color: white;
-  padding: 15px 32px;
+  padding: 15px 20px;
+  margin-right: 10px;
+  margin-top: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+
+}
+
+.gameStatus{
+  margin:0px auto;
+
   background-image: url(css/radar.png); no-repeat left center;
   padding-left: 20px;
+
 }
 
 .buttonUI:hover{
   background-color: #346392;
+}
+
+
+
+.showStatus{
+  position:float;
 }
 
 
@@ -76,8 +92,9 @@ body {
   background: black;
 }
 
+
 #gameArea{
-  /*transform: rotate(10deg);*/
+    position:float;
 }
 
 /*show cover*/
@@ -119,6 +136,11 @@ body {
   100% {z-index:0; left:50%;top:50%; }
   }
 */
+
+.controlPanel{
+  position:
+}
+
 .r {
   border-right: 1pt solid white;
 }
@@ -240,3 +262,25 @@ body {
 
 .menudemoBasicUsage .menu-demo-container {
   min-height: 200px; }
+
+#missileoff {
+    width: 80px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+}
+#missileon {
+    width: 80px;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#radaroff {
+    width: 60px;
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
+}
+#radaron {
+    width: 60px;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
