@@ -49,8 +49,44 @@ body {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-
 }
+
+/*missile button*/
+#mbuttonoff {
+    opacity:0.3;
+    animation: mbuttonoff 0.5s ease-in-out;
+}
+@keyframes mbuttonoff {
+  0% {opacity: 1;}
+  100% {opacity: 0.3;}
+}
+#mbuttonon {
+    animation: mbuttonon 0.5s ease-in-out;
+}
+@keyframes mbuttonon {
+  0% {opacity: 0.3;}
+  100% {opacity: 1;}
+}
+/*******/
+
+
+/*radar button*/
+#rbuttonoff {
+    opacity:0.3;
+    animation: mbuttonoff 0.5s ease-in-out;
+}
+@keyframes mbuttonoff {
+  0% {opacity: 1;}
+  100% {opacity: 0.3;}
+}
+#rbuttonon {
+    animation: mbuttonon 0.5s ease-in-out;
+}
+@keyframes mbuttonon {
+  0% {opacity: 0.3;}
+  100% {opacity: 1;}
+}
+/*******/
 
 .gameStatus{
   margin:0px auto;
@@ -64,81 +100,13 @@ body {
   background-color: #346392;
 }
 
-
-
 .showStatus{
-  position:float;
+    margin-left: 10px;
+    float:left;
 }
-
-
-.cube-Near {
-  width:50px;
-  height:50px;
-  background: red;
-}
-.cube-Mid {
-  width:50px;
-  height:50px;
-  background: yellow;
-}
-.cube-Far {
-  width:50px;
-  height:50px;
-  background: blue;
-}
-.cube-Miss {
-  width:50px;
-  height:50px;
-  background: black;
-}
-
 
 #gameArea{
-    position:float;
-}
-
-/*show cover*/
-/*
-#shadow {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  animation:shadow 4s ease-in-out;
-}
-
-@keyframes shadow {
-  0% {z-index:5; background: rgba(0,0,0,0);}
-  15% {z-index:5; background: rgba(0,0,0,0.8);}
-  80% {z-index:5; background: rgba(0,0,0,0.8);}
-  100% {z-index:0; background: rgba(0,0,0,0);}
-}
-*/
-/* ********* */
-
-/*
-#status {
-  position:relative;
-  font-size: 32px;
-  color: white;
-  font-family: 'Lato', sans-serif;
-  opacity: 0;
-  animation: status 2.8s ease-out;
-  -webkit-animation-delay: 1s;
-  animation-delay: 1s;
-}
-@keyframes status {
-  0% {z-index:6;left:50%;top:50%; opacity:0;}
-  25% {z-index:6; left:50%;top:50%; opacity:1;}
-  50% {}
-  75% {z-index:6; left:50%;top:50%; opacity:0;}
-  100% {z-index:0; left:50%;top:50%; }
-  }
-*/
-
-.controlPanel{
-  position:
+    float:left;
 }
 
 .r {
@@ -263,24 +231,61 @@ body {
 .menudemoBasicUsage .menu-demo-container {
   min-height: 200px; }
 
+#invalidoff {
+    width: 70px;
+    opacity: 0.3;
+    animation: invalidoff 0.5s ease-in-out;
+}
+@keyframes invalidoff {
+  0% {opacity: 1;}
+  100% {opacity: 0.3;}
+}
+
+#invalidon {
+    width: 70px;
+    animation: invalidon 0.5s ease-in-out;
+}
+
+@keyframes invalidon {
+  0% {opacity: 0.3;}
+  100% {opacity: 1;}
+}
+
 #missileoff {
     width: 80px;
     opacity: 0.3;
-    transition: opacity 0.3s ease-in-out;
+    animation: missileoff 0.3s ease-in-out;
 }
+@keyframes missileoff {
+  0% {opacity: 1;}
+  100% {opacity: 0.3;}
+}
+
 #missileon {
     width: 80px;
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
+    animation: missileon 0.3s ease-in-out;
+}
+
+@keyframes missileon {
+  0% {opacity: 0.3;}
+  100% {opacity: 1;}
 }
 
 #radaroff {
     width: 60px;
     opacity: 0.3;
-    transition: opacity 0.3s ease-in-out;
+    animation: radaroff 0.3s ease-in-out;
+}
+@keyframes radaroff {
+  0% {opacity: 1;}
+  100% {opacity: 0.3;}
 }
 #radaron {
     width: 60px;
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
+    animation: radaron 0.3s ease-in-out;
 }
+@keyframes radaron {
+  0% {opacity: 0.3;}
+  100% {opacity: 1;}
+}
+
