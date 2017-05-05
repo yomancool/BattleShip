@@ -27,6 +27,7 @@ textarea, input {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
 body {
   /* background-color: #1E90FF; */
 
@@ -36,19 +37,6 @@ body {
   margin:0px auto;
   width: 88%;
   height: auto;
-}
-
-.buttonUI {
-  background-color:  #008CBA;
-  border: #008CBA;
-  color: white;
-  padding: 15px 20px;
-  margin-right: 10px;
-  margin-top: 5px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
 }
 
 /*missile button*/
@@ -90,23 +78,34 @@ body {
 
 .gameStatus{
   margin:0px auto;
-
   background-image: url(css/radar.png); no-repeat left center;
   padding-left: 20px;
+}
 
+
+#gameArea{
+    position:relative;
+    overflow:hidden;
+}
+
+.statusLogo{
+    float:left;
+}
+
+.buttonUI {
+  background-color:  #008CBA;
+  border: #008CBA;
+  color: white;
+  padding: 10px 15px;
+  margin-right: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
 }
 
 .buttonUI:hover{
   background-color: #346392;
-}
-
-.showStatus{
-    margin-left: 10px;
-    float:left;
-}
-
-#gameArea{
-    float:left;
 }
 
 .r {
