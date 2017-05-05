@@ -248,14 +248,13 @@ var game;
         if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
             return;
         }
-        if (game.state.move == true)
-            if ((game.weapons[1] == true && game.state.radar[game.currentUpdateUI.yourPlayerIndex] == false)) {
-                game.invalid = true;
-            }
-            else {
-                game.invalid = false;
-                game.weapons[0] = !game.weapons[0];
-            }
+        if (game.state.move == true) {
+            if (game.weapons[1] == true)
+                game.weapons[1] = false;
+            //invalid = true;
+            game.invalid = false;
+            game.weapons[0] = !game.weapons[0];
+        }
         else {
             game.invalid = true;
         }
@@ -273,13 +272,11 @@ var game;
             return;
         }
         if (game.state.move == true) {
-            if ((game.weapons[0] == true && game.state.missile[game.currentUpdateUI.yourPlayerIndex] == false)) {
-                game.invalid = true;
-            }
-            else {
-                game.invalid = false;
-                game.weapons[1] = !game.weapons[1];
-            }
+            //invalid = true;
+            if (game.weapons[0] == true)
+                game.weapons[0] = false;
+            game.invalid = false;
+            game.weapons[1] = !game.weapons[1];
         }
         else {
             game.invalid = true;
