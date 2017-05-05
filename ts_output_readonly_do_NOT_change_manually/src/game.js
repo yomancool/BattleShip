@@ -162,6 +162,7 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
+            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
