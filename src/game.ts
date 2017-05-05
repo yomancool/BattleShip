@@ -273,14 +273,13 @@ module game {
     if(state.missile[currentUpdateUI.yourPlayerIndex]) {
       return;
     }
-    if(state.move == true)
-      if((weapons[1]==true && state.radar[currentUpdateUI.yourPlayerIndex]==false)) {
-        invalid = true;
-      }
-      else {
+    if(state.move == true) {
+        if(weapons[1]==true) weapons[1] = false;
+          //invalid = true;
+      
         invalid = false;
         weapons[0] = !weapons[0];
-      }
+    }
     else {
       invalid = true;
     }
@@ -298,13 +297,12 @@ module game {
       return;
     }
     if(state.move == true) {
-      if((weapons[0]==true && state.missile[currentUpdateUI.yourPlayerIndex]==false)) {
-        invalid = true;
-      }
-      else {
+        //invalid = true;
+        if(weapons[0]==true) weapons[0] = false;
+      
       invalid = false;
       weapons[1] = !weapons[1];
-      }
+      
     }
     else {
       invalid = true;

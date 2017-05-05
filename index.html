@@ -28,23 +28,11 @@
 
 <body ng-cloak>
     <!-- status area -->
-    <div ng-if="!game.firstMove()" class="showStatus">
-        <div ng-if="!game.invalid"><img id="invalidoff" src="css/invalid.png"></div>
-        <div ng-if="game.invalid"><img id="invalidon" src="css/invalid.png"></div>
-        <!-- weapon area -->
-            <!-- missile -->
-            <div ng-if="!game.weapons[0]"><img id="missileoff" src="css/bitmissile.png"> </div>
-            <div ng-if="game.weapons[0]"><img id="missileon" src="css/bitmissile.png"> </div>
-            <!-- radar -->
-            <div ng-if="!game.weapons[1]"><img id="radaroff" src="css/radarbit.png"> </div>
-            <div ng-if="game.weapons[1]"><img id="radaron" src="css/radarbit.png"> </div>
-    </div>
+    
 
     <!-- game area -->
     <div id="gameArea">
         <img class="background" src="css/ocean_b3.gif">
-        <!--  <div id="shadow" class="shadow"> </div> -->
-
         <div id="myBoard" ng-repeat="row in [0, 1, 2, 3, 4, 5, 6, 7]" style="position:absolute; top:{{row * 11}}%; width:100%; height:11%;">
             <div ng-repeat="col in [0, 1, 2, 3, 4, 5, 6, 7]" style="position:absolute; top:0; left:{{col * 11}}%; width:11%; height:100%;" ng-class="{myhover:hover && !game.missArea(row,col),
         r: col < 10, b: row < 10, t: row < 1, l: col < 1,
@@ -64,6 +52,18 @@
                 </div>
             </div>
         </div>
+        <div ng-if="!game.firstMove()" class="showStatus">
+            <div ng-if="!game.invalid"  class="statusLogo"><img id="invalidoff" src="css/invalid.png"></div>
+            <div ng-if="game.invalid" class="statusLogo"><img id="invalidon" src="css/invalid.png"></div>
+            <!-- weapon area -->
+            <!-- missile -->
+            <div ng-if="!game.weapons[0]" class="statusLogo"><img id="missileoff" src="css/bitmissile.png"> </div>
+            <div ng-if="game.weapons[0]" class="statusLogo"><img id="missileon" src="css/bitmissile.png"> </div>
+            <!-- radar -->
+            <div ng-if="!game.weapons[1]" class="statusLogo"><img id="radaroff" src="css/radarbit.png"> </div>
+            <div ng-if="game.weapons[1]" class="statusLogo"><img id="radaron" src="css/radarbit.png"> </div>
+        </div>
+        
         <button class="buttonUI" id="mbuttonoff" ng-if=" !game.usedmissile() && !game.state.move"><img src="css/missile.png" height="18"/>   Use missile</button>
         <button class="buttonUI" id="mbuttonon" ng-click="game.turnmissile()" ng-if="!game.usedmissile() && game.state.move"><img src="css/missile.png" height="18"/>   Use missile</button>
         
