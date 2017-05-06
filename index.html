@@ -42,7 +42,7 @@
         missAreaMiddle:game.missArea(row,col) && game.distance(row,col) < 6 && game.distance(row,col) >= 2 && game.previousShot(row,col),
         missAreaNear:game.missArea(row,col) && game.distance(row,col) < 2 && game.previousShot(row,col),
         missArea:game.missArea(row,col),
-        shootingArea:game.shootingArea(row,col) && !game.crossHover(row, col, game.mouseRow, game.mouseCol),
+        shootingArea:game.shootingArea(row,col) && !game.crossHover(row, col, game.mouseRow, game.mouseCol) && !game.radarHover(row, col, game.mouseRow, game.mouseCol) ,
         crossHover:!game.missArea(row,col) && game.crossHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[1],
         radarHover:!game.missArea(row,col) && game.radarHover(row, col, game.mouseRow, game.mouseCol) && !game.weapons[0] }" ng-mouseenter="hover=true; game.mouseRow=row; game.mouseCol=col" ng-mouseleave="hover=false; game.mouseRow=-1; game.mouseCol=-1" ng-click="game.cellClickedMy(row, col)" id="{{'my' + row + 'x' + col}}">
                 <div style="width:100%; height: 100%" ng-class="{slowlyAppear: game.shouldSlowlyAppear(row, col),}" ng-if="game.shouldShowImage(row, col)">

@@ -162,7 +162,6 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
-            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
@@ -465,7 +464,7 @@ var game;
         }
         if (row == shipRow && col == shipCol)
             return false;
-        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col))
+        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) || (mouseRow - 1 == row && mouseCol - 1 == col) || (mouseRow + 1 == row && mouseCol + 1 == col) || (mouseRow - 1 == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol - 1 == col))
             return true;
         return false;
     }

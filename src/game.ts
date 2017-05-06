@@ -502,7 +502,7 @@ export function moveArea(row:number,col:number):boolean {
     if(row == shipRow && col == shipCol)
       return false;
 
-    if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) )
+    if( (mouseRow-1 == row && mouseCol == col) || (mouseRow == row && mouseCol-1 == col) || (mouseRow == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) || (mouseRow-1 == row && mouseCol-1 == col) || (mouseRow+1 == row && mouseCol+1 == col) || (mouseRow-1 == row && mouseCol+1 == col) || (mouseRow+1 == row && mouseCol-1 == col) )
       return true;
     return false;
   }
