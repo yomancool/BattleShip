@@ -59,14 +59,15 @@
         <button class="buttonUI" id="rbuttonon" ng-click="game.turnRadar()" ng-if="!game.usedRadar() && game.state.move"><img src="css/radar.png" class="buttonIcon">   Use Radar</button>
 
         <div ng-if="!game.firstMove()" class="showStatus">
-            <div ng-if="!game.invalid" class="statusLogo"><img id="invalidoff" src="css/invalid.png" height="50" width="25"></div>
-            <div ng-if="game.invalid" class="statusLogo"><img id="invalidon" src="css/invalid.png" height="50" width="25"></div>
+            <div ng-if="!game.invalid" class="statusLogo"><img id="invalidoff" src="css/warning.png"  class="warningicon"></div>
+            <div ng-if="game.invalid" class="statusLogo"><img id="invalidon" src="css/warning.png" class="warningicon"></div>
 
-            <div ng-if="!game.weapons[0]" class="statusLogo"><img id="missileoff" src="css/bitmissile.png" height="50" width="25"> </div>
-            <div ng-if="game.weapons[0]" class="statusLogo"><img id="missileon" src="css/bitmissile.png" height="50" width="25"> </div>
+            <div ng-if="!game.weapons[1]" class="statusLogo"><img id="radaroff" src="css/detect.png" class="radaricon"></div>
+            <div ng-if="game.weapons[1]" class="statusLogo"><img id="radaron" src="css/detect.png" class="radaricon"></div>
 
-            <div ng-if="!game.weapons[1]" class="statusLogo"><img id="radaroff" src="css/radarbit.png" height="50" width="25"> </div>
-            <div ng-if="game.weapons[1]" class="statusLogo"><img id="radaron" src="css/radarbit.png" height="50" width="25"> </div>
+            <div ng-if="!game.weapons[0]" class="statusLogo"><img id="missileoff" src="css/bomb.png" class="bombicon" width="30px"></div>
+            <div ng-if="game.weapons[0]" class="statusLogo"><img id="missileon" src="css/bomb.png" class="bombicon" width="30px"></div>
+
         </div>
     </div>
 

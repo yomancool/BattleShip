@@ -77,7 +77,8 @@ body {
 /*******/
 
 .showStatus{
-  float:right;
+  float:left;
+  /*outline: #00FF00 dotted thick;*/
 }
 
 
@@ -87,8 +88,13 @@ body {
 }
 
 .statusLogo{
-    float:left;
+  float:left;
+  margin:0px 20px 0px 20px;
+  width:50px;
+  /*outline: #00FF00 dotted thick;*/
 }
+
+
 
 .buttonUI {
   background-color:  #008CBA;
@@ -111,6 +117,22 @@ body {
   vertical-align: middle;
   padding-right:5px;
 }
+
+.bombicon{
+  height:50px;
+  width:10px;
+}
+
+.radaricon{
+  height:50px;
+}
+
+.warningicon{
+  height:50px;
+}
+
+
+
 
 .r {
   border-right: 1pt solid white;
