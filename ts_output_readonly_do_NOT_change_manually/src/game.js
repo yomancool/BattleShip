@@ -162,7 +162,6 @@ var game;
             if (game.proposals[delta.row][delta.col] < 2) {
                 move = null;
             }
-            //gameService.communityMove(move, myProposal);
         }
     }
     function isFirstMove() {
@@ -244,8 +243,8 @@ var game;
     game.valid = valid;
     //missile
     function turnmissile() {
-        game.mouseRow = -1;
-        game.mouseCol = -1;
+        game.mouseRow = -99;
+        game.mouseCol = -99;
         if (game.state.missile[game.currentUpdateUI.yourPlayerIndex]) {
             return;
         }
@@ -267,8 +266,8 @@ var game;
     game.usedmissile = usedmissile;
     /**Radar */
     function turnRadar() {
-        game.mouseRow = -1;
-        game.mouseCol = -1;
+        game.mouseRow = -99;
+        game.mouseCol = -99;
         if (game.state.radar[game.currentUpdateUI.yourPlayerIndex]) {
             return;
         }
@@ -303,6 +302,12 @@ var game;
         }
         catch (e) {
             log.info(["Cell is already full in position:", row, col]);
+            return;
+        }
+        if (game.weapons[1]) {
+            console.log("use radar");
+            game.weapons[0] = false;
+            game.weapons[1] = false;
             return;
         }
         var nextUpdateUI = game.currentUpdateUI;
@@ -399,8 +404,13 @@ var game;
     }
     game.distance = distance;
     function previousShot(row, col) {
-        if (game.state.buffer != null && game.state.buffer.row == row && game.state.buffer.col == col)
-            return true;
+        if (game.state.move)
+            return false;
+        console.log(game.state.buffer);
+        for (var i = 0; i < 5; i++) {
+            if (game.state.buffer.row[i] == row && game.state.buffer.col[i] == col)
+                return true;
+        }
         return false;
     }
     game.previousShot = previousShot;
@@ -430,8 +440,8 @@ var game;
             game.state.delta.row === row && game.state.delta.col === col;
     }
     game.shouldSlowlyAppear = shouldSlowlyAppear;
-    game.mouseRow = -1;
-    game.mouseCol = -1;
+    game.mouseRow = -99;
+    game.mouseCol = -99;
     function crossHover(row, col, mouseRow, mouseCol) {
         if (game.weapons[0] == false)
             return false;
@@ -465,7 +475,7 @@ var game;
         }
         if (row == shipRow && col == shipCol)
             return false;
-        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col))
+        if ((mouseRow - 1 == row && mouseCol == col) || (mouseRow == row && mouseCol - 1 == col) || (mouseRow == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol == col) || (mouseRow == row && mouseCol == col) || (mouseRow - 1 == row && mouseCol - 1 == col) || (mouseRow + 1 == row && mouseCol + 1 == col) || (mouseRow - 1 == row && mouseCol + 1 == col) || (mouseRow + 1 == row && mouseCol - 1 == col))
             return true;
         return false;
     }
