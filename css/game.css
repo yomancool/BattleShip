@@ -94,16 +94,22 @@ body {
   background-color:  #008CBA;
   border: #008CBA;
   color: white;
-  padding: 10px 15px;
-  margin-right: 10px;
+  width: 20%;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
+  font-size: 8%;
+  vertical-align: middle;
+  padding: 2%;
 }
 
 .buttonUI:hover{
   background-color: #346392;
+}
+
+.buttonIcon{
+  height: 20px;
+  vertical-align: middle;
+  padding-right:5px;
 }
 
 .r {
@@ -285,4 +291,3 @@ body {
   0% {opacity: 0.3;}
   100% {opacity: 1;}
 }
-
