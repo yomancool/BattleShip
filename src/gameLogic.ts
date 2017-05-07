@@ -1,9 +1,14 @@
+
 type Board = string[][];
 type missile = boolean[];
 type Radar = boolean[];
 interface BoardDelta {
   row: number;
   col: number;
+}
+interface bufferArray {
+    row: number[];
+    col: number[];
 }
 type IProposalData = BoardDelta;
 
@@ -15,7 +20,7 @@ interface IState {
   yourShip: BoardDelta;
   move: boolean;
   shot: boolean;
-  buffer: BoardDelta;
+  buffer: bufferArray;
   missile: missile;
   radar: Radar;
 }
@@ -36,6 +41,15 @@ module gameLogic {
       let board: Board = [];
       let missile: missile = [];
       let radar: Radar = [];
+        
+      //initialize buffer
+      let bufferrow = [];
+      let buffercol = [];
+      for(let i=0; i<5; i++) {
+          bufferrow[i] = -1;
+          buffercol[i] = -1;
+      }
+
       for (let i = 0; i < ROWS; i++) {
         board[i] = [];
         for (let j = 0; j < COLS; j++) {
@@ -47,6 +61,7 @@ module gameLogic {
       missile[1] = false;
       radar[0] = false;
       radar[1] = false;
+        
       // random starting point
       let mine = Math.floor((Math.random() * ROWS));
       let your = Math.floor((Math.random() * COLS));
@@ -54,7 +69,7 @@ module gameLogic {
       board[0][mine] = 'O';
       board[ROWS-1][your] = 'O';
       
-      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:ROWS-1,col:your}, move:false, shot:false, buffer:null, missile:missile, radar:radar};
+      return {myBoard: board, delta: null, start:1, myShip: {row:0,col:mine}, yourShip: {row:ROWS-1,col:your}, move:false, shot:false, buffer:{row:bufferrow,col:buffercol}, missile:missile, radar:radar};
     }  
 }
 
@@ -88,10 +103,14 @@ module gameLogic {
     let yourP: BoardDelta;
     let originRow;
     let originCol;
+    let buffer = stateBeforeMove.buffer;
     let board = stateBeforeMove.myBoard;
     let missile = stateBeforeMove.missile;
     let radar = stateBeforeMove.radar;
-
+    for(let i=0; i<5; i++) {
+        buffer.row[i] = -1;
+        buffer.col[i] = -1;
+    }
     if(turnIndexBeforeMove==0) {  //I move
           originRow = stateBeforeMove.myShip.row;
           originCol = stateBeforeMove.myShip.col;
@@ -112,11 +131,11 @@ module gameLogic {
           myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
           yourP = {row: row, col: col};
         }
-    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true, shot:false, buffer:null, missile:missile, radar:radar}
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:true, shot:false, buffer:buffer, missile:missile, radar:radar}
   }
 
-    export function crossmissile(board:Board, row:number, col:number, turnIndex:number, state:IState):Board {
-      let shipRow, shipCol;
+    export function crossmissile(buffer:bufferArray, board:Board, row:number, col:number, turnIndex:number, state:IState) {
+      let shipRow, shipCol, count=0, bufferrow = [], buffercol = [];
       if(turnIndex==0) {
         shipRow = state.myShip.row;
         shipCol = state.myShip.col;
@@ -129,18 +148,42 @@ module gameLogic {
       for(let i=-1; i<=1; i++) {
         for(let j=-1; j<=1; j++) {
           if((0 <= row+i) && (row+i <= ROWS) && (0 <= col+j) && (col+j <= COLS)) {
-            if( (i==-1 && j==-1) || (i==-1 && j==1) || (i==1 && j==-1) || (i==1 && j==1))
-              continue;
-              if(board[row+i][col+j] == 'O' && (row+i!=shipRow && col+j!=shipCol))
+              
+            if( (i==-1 && j==-1) || (i==-1 && j==1) || (i==1 && j==-1) || (i==1 && j==1)) 
+                continue;
+              if(board[row+i][col+j] == 'O' && (row+i!=shipRow && col+j!=shipCol)) {
                 board[row+i][col+j] = 'X';
-              else if(board[row+i][col+j] == '')
+                bufferrow[count] = row+i;
+                buffercol[count] = col+j;
+                count++;
+              }
+              else if(board[row+i][col+j] == '') {
                 board[row+i][col+j] = 'M';
-              else if(board[row+i][col+j] == 'X')
+                bufferrow[count] = row+i;
+                buffercol[count] = col+j;
+                count++;
+              }
+              else if(board[row+i][col+j] == 'X') {
                 board[row+i][col+j] = 'X';
+                bufferrow[count] = row+i;
+                buffercol[count] = col+j;
+                count++;
+              }
             }
+          }
         }
+        
+      for(let i=count; i<5; i++) {
+        bufferrow[i] = -1;
+        buffercol[i] = -1;
       }
-      return board;
+      buffer.row = bufferrow;
+      buffer.col = buffercol;
+
+      return {
+          buffer: buffer,
+          board: board
+      };
     }
 
     export function detect(board:Board, row:number, col:number, turnIndex:number, state:IState):Board {
@@ -173,13 +216,16 @@ module gameLogic {
     export function shotState(stateBeforeMove: IState, turnIndexBeforeMove:number,row:number, col:number, weapons:boolean[]): IState {
     let originRow;
     let originCol;
+    let buffer = stateBeforeMove.buffer;
     let board = stateBeforeMove.myBoard;
     let missile = stateBeforeMove.missile;
     let radar = stateBeforeMove.radar;
     let myP = {row: stateBeforeMove.myShip.row, col: stateBeforeMove.myShip.col};
     let yourP = {row: stateBeforeMove.yourShip.row, col: stateBeforeMove.yourShip.col};
     if(weapons[0] == true) {
-      board = crossmissile(board,row,col,turnIndexBeforeMove, stateBeforeMove);
+      let tmp = crossmissile(buffer,board,row,col,turnIndexBeforeMove, stateBeforeMove);
+      board = tmp.board;
+      buffer = tmp.buffer;
       missile[turnIndexBeforeMove] = true;
     }
     else if(weapons[1] == true) {
@@ -187,6 +233,12 @@ module gameLogic {
       radar[turnIndexBeforeMove] = true;
     }
     else {
+      buffer.row[0] = row;
+      buffer.col[0] = col;
+      for(let i=1; i<5; i++) {
+        buffer.row[i] = -1;
+        buffer.col[i] = -1;
+      }
       if(board[row][col]=='') {//miss 
         console.log("shot miss!!");
         board[row][col] = 'M';
@@ -218,7 +270,7 @@ module gameLogic {
       }
     }
     
-    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false, shot:true, buffer:{row,col}, missile:missile, radar:radar}
+    return {myBoard: board, delta: null, start:1, myShip: myP, yourShip: yourP, move:false, shot:true, buffer:buffer, missile:missile, radar:radar}
   }
 
   export function createMove(

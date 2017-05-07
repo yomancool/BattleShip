@@ -268,8 +268,8 @@ module game {
 
   //missile
   export function turnmissile() {
-    mouseRow = -1;
-    mouseCol = -1;
+    mouseRow = -99;
+    mouseCol = -99;
     if(state.missile[currentUpdateUI.yourPlayerIndex]) {
       return;
     }
@@ -291,8 +291,8 @@ module game {
 
   /**Radar */
   export function turnRadar() {
-    mouseRow = -1;
-    mouseCol = -1;
+    mouseRow = -99;
+    mouseCol = -99;
     if(state.radar[currentUpdateUI.yourPlayerIndex]) {
       return;
     }
@@ -331,12 +331,19 @@ module game {
       log.info(["Cell is already full in position:", row, col]);
       return;
     }
+    if(weapons[1]) {
+        console.log("use radar");
+        weapons[0] = false;
+        weapons[1] = false;
+        return;
+    }
     let nextUpdateUI: IUpdateUI = currentUpdateUI;
     nextUpdateUI.state = nextMove.state;
     nextUpdateUI.turnIndex = nextMove.turnIndex;
     state = nextUpdateUI.state;
     console.log("state after move: ",state);
     updateUI(nextUpdateUI);
+    
     weapons[0] = false;
     weapons[1] = false;
     // Move is legal, make it!
@@ -432,8 +439,14 @@ export function moveArea(row:number,col:number):boolean {
   }
 
   export function previousShot(row:number, col:number): boolean {
-    if(state.buffer!=null && state.buffer.row == row && state.buffer.col == col)
-      return true;
+    if(state.move) return false;
+      
+    console.log(state.buffer);
+    
+    for(let i=0; i<5; i++) {
+        if(state.buffer.row[i] == row && state.buffer.col[i] == col)
+            return true;
+    }
     return false;
   }
 
@@ -464,8 +477,8 @@ export function moveArea(row:number,col:number):boolean {
   }
 
 
-  export let mouseRow:number = -1;
-  export let mouseCol:number = -1;
+  export let mouseRow:number = -99;
+  export let mouseCol:number = -99;
 
   export function crossHover(row: number,col: number,mouseRow: number,mouseCol: number): boolean {
     if(weapons[0]==false)
