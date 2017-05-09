@@ -441,8 +441,6 @@ export function moveArea(row:number,col:number):boolean {
   export function previousShot(row:number, col:number): boolean {
     if(state.move) return false;
       
-    console.log(state.buffer);
-    
     for(let i=0; i<5; i++) {
         if(state.buffer.row[i] == row && state.buffer.col[i] == col)
             return true;
