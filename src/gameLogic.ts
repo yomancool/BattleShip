@@ -147,10 +147,11 @@ module gameLogic {
 
       for(let i=-1; i<=1; i++) {
         for(let j=-1; j<=1; j++) {
-          if((0 <= row+i) && (row+i <= ROWS) && (0 <= col+j) && (col+j <= COLS)) {
+          if((0 <= row+i) && (row+i < ROWS) && (0 <= col+j) && (col+j < COLS)) {
               
             if( (i==-1 && j==-1) || (i==-1 && j==1) || (i==1 && j==-1) || (i==1 && j==1)) 
                 continue;
+              
               if(board[row+i][col+j] == 'O' && (row+i!=shipRow && col+j!=shipCol)) {
                 board[row+i][col+j] = 'X';
                 bufferrow[count] = row+i;
@@ -199,7 +200,7 @@ module gameLogic {
 
       for(let i=-1; i<=1; i++) {
         for(let j=-1; j<=1; j++) {
-          if((0 <= row+i) && (row+i <= ROWS) && (0 <= col+j) && (col+j <= COLS)) { 
+          if((0 <= row+i) && (row+i < ROWS) && (0 <= col+j) && (col+j < COLS)) { 
             if(board[row+i][col+j] == 'O' && (row+i!=shipRow && col+j!=shipCol)) {
               window.alert("foundShip!");
               console.log("foundship!!!!!!");

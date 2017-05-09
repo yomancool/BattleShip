@@ -107,7 +107,7 @@ var gameLogic;
         }
         for (var i = -1; i <= 1; i++) {
             for (var j = -1; j <= 1; j++) {
-                if ((0 <= row + i) && (row + i <= gameLogic.ROWS) && (0 <= col + j) && (col + j <= gameLogic.COLS)) {
+                if ((0 <= row + i) && (row + i < gameLogic.ROWS) && (0 <= col + j) && (col + j < gameLogic.COLS)) {
                     if ((i == -1 && j == -1) || (i == -1 && j == 1) || (i == 1 && j == -1) || (i == 1 && j == 1))
                         continue;
                     if (board[row + i][col + j] == 'O' && (row + i != shipRow && col + j != shipCol)) {
@@ -155,7 +155,7 @@ var gameLogic;
         }
         for (var i = -1; i <= 1; i++) {
             for (var j = -1; j <= 1; j++) {
-                if ((0 <= row + i) && (row + i <= gameLogic.ROWS) && (0 <= col + j) && (col + j <= gameLogic.COLS)) {
+                if ((0 <= row + i) && (row + i < gameLogic.ROWS) && (0 <= col + j) && (col + j < gameLogic.COLS)) {
                     if (board[row + i][col + j] == 'O' && (row + i != shipRow && col + j != shipCol)) {
                         window.alert("foundShip!");
                         console.log("foundship!!!!!!");

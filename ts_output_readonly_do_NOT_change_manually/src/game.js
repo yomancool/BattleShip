@@ -406,7 +406,6 @@ var game;
     function previousShot(row, col) {
         if (game.state.move)
             return false;
-        console.log(game.state.buffer);
         for (var i = 0; i < 5; i++) {
             if (game.state.buffer.row[i] == row && game.state.buffer.col[i] == col)
                 return true;
