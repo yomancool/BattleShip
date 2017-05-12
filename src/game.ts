@@ -61,13 +61,13 @@ module game {
   function getTranslations(): Translations {
     return {};
   }
-
 /*
   export function communityUI(communityUI: ICommunityUI) {
     log.info("Game got communityUI:", communityUI);
     // If only proposals changed, then do NOT call updateUI. Then update proposals.
     let nextUpdateUI: IUpdateUI = {
         playersInfo: [],
+        yourPlayerInfo: currentUpdateUI.yourPlayerInfo,
         playMode: communityUI.yourPlayerIndex,
         numberOfPlayers: communityUI.numberOfPlayers,
         state: communityUI.state,
@@ -99,7 +99,6 @@ module game {
       proposals[delta.row][delta.col]++;
     }
   }
-
 */
   export function isProposal(row: number, col: number) {
     return proposals && proposals[row][col] > 0;
@@ -162,8 +161,10 @@ module game {
     state.move = false;
     state.shot = false;
     if (!proposals) {
-      gameService.makeMove(move,null);
-    } else {
+      gameService.makeMove(move,null,'chatchat');
+    } 
+    /*
+    else {
       let delta = move.state.delta;
       let myProposal:IProposal = {
         data: delta,
@@ -174,8 +175,9 @@ module game {
       if (proposals[delta.row][delta.col] < 2) {
         move = null;
       }
-      //gameService.communityMove(move, myProposal);
+      gameService.communityMove(move, myProposal);
     }
+    */
   }
 
   function isFirstMove() {

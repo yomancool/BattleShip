@@ -316,7 +316,7 @@ interface IDragAndDropService {
 // or import them first, e.g.,
 // import log = gamingPlatform.log;
 // log.warn('some warning');
-declare namespace gamingPlatformREMOVEDWHENCOPIED {
+declare namespace gamingPlatform {
   var gameService: IGameService;
   var alphaBetaService: IAlphaBetaService;
   var translate: ITranslateService;

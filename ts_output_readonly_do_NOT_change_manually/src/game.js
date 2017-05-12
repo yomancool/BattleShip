@@ -55,6 +55,7 @@ var game;
         // If only proposals changed, then do NOT call updateUI. Then update proposals.
         let nextUpdateUI: IUpdateUI = {
             playersInfo: [],
+            yourPlayerInfo: currentUpdateUI.yourPlayerInfo,
             playMode: communityUI.yourPlayerIndex,
             numberOfPlayers: communityUI.numberOfPlayers,
             state: communityUI.state,
@@ -86,7 +87,6 @@ var game;
           proposals[delta.row][delta.col]++;
         }
       }
-    
     */
     function isProposal(row, col) {
         return game.proposals && game.proposals[row][col] > 0;
@@ -149,20 +149,23 @@ var game;
         game.state.move = false;
         game.state.shot = false;
         if (!game.proposals) {
-            gameService.makeMove(move, null);
+            gameService.makeMove(move, null, 'chatchat');
         }
+        /*
         else {
-            var delta = move.state.delta;
-            var myProposal = {
-                data: delta,
-                chatDescription: '' + (delta.row + 1) + 'x' + (delta.col + 1),
-                playerInfo: game.yourPlayerInfo,
-            };
-            // Decide whether we make a move or not (if we have 2 other proposals supporting the same thing).
-            if (game.proposals[delta.row][delta.col] < 2) {
-                move = null;
-            }
+          let delta = move.state.delta;
+          let myProposal:IProposal = {
+            data: delta,
+            chatDescription: '' + (delta.row + 1) + 'x' + (delta.col + 1),
+            playerInfo: yourPlayerInfo,
+          };
+          // Decide whether we make a move or not (if we have 2 other proposals supporting the same thing).
+          if (proposals[delta.row][delta.col] < 2) {
+            move = null;
+          }
+          gameService.communityMove(move, myProposal);
         }
+        */
     }
     function isFirstMove() {
         return !game.state;
