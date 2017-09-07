@@ -1,4 +1,4 @@
-TicTacToe
+BattleShip
 =========
 
-TicTacToe game
+BattleShip game
